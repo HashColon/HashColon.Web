@@ -1,0 +1,11 @@
+.spacer{
+    flex: 1 1 auto;
+}
+
+.backendConnector{
+    max-width: 23em !important;    
+}
+
+mat-toolbar{
+    height: var(--hashcolon-titlebar-height);
+}

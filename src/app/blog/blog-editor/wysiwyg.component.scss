@@ -1,0 +1,113 @@
+.wysiwyg{
+    --height: calc(100vh - var(--hashcolon-titlebar-height)); 
+    --half-height: calc(var(--height) / 2 );
+    --vert-div: calc(var(--half-height) - 1px);
+}
+mat-sidenav-container{
+    height: 100%;
+    min-height: var(--height);
+}
+
+.mat-progress-bar{
+    position: absolute !important;
+    z-index: 300;    
+}
+
+.mat-toolbar.info-label{
+    height: calc( 1 * var(--hashcolon-titlebar-height));
+    font-size: 1em;    
+}
+
+.wysiwyg-horizontal{
+    display:grid !important;
+    grid-template-columns: calc(50% - 1px) 2px calc(50% - 1px);    
+    height: auto;    
+}
+
+.wysiwyg-vertical{
+    display:grid !important;
+    grid-template-rows: var(--vert-div) 2px var(--vert-div);
+    height: auto;
+}
+
+.division{
+    margin: 0; 
+    padding: 0;
+    border:0;  
+    overflow-y: auto;  
+}
+
+.division.editor-div.horizontal{        
+    grid-column: 1;
+    height: var(--height);    
+    max-height: var(--height);
+}
+.division.editor-div.vertical{    
+    grid-row: 3;    
+}
+.division.page-div.horizontal{    
+    grid-column: 3;
+    height: var(--height);
+    max-height: var(--height);
+}
+.division.page-div.vertical{
+    grid-row:1;
+}
+.divider.horizontal{
+    grid-column: 2;
+}
+.divider.vertical{
+    grid-row: 2;    
+}
+
+.editor{        
+    margin: 8px;   
+}
+
+.tags{        
+    width: 20em;
+    align-self: right;
+}
+
+.editor .mat-form-field-wrapper{
+    margin-bottom: -1em;
+}
+
+.editor.title{
+    width: calc(100% - 16px);
+    font-family: 'Lato-BlackItalic', 'Jal Haru', 'Jal Onuel';
+    font-size: 1.8em;    
+}
+
+.editor.tags{
+    width: calc(100% - 16px);
+}
+
+.spacer{
+    flex: 1 1 auto;
+}
+
+.nav-toggle-button {
+    transform: scale(.7); 
+}
+
+.nav-toggle-button.hide{
+    visibility: hidden;
+}
+
+.nav-button {
+    text-align: left;
+    width: 100%;    
+    padding: 0 4px !important;
+    &:hover {
+        .nav-toggle-button.hide {
+            visibility: visible;
+        }
+    }
+}
+
+.mat-tree-node{
+    height: 40px;
+    min-height: 40px !important;
+}
+

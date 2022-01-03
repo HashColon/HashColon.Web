@@ -1,0 +1,28 @@
+<mat-progress-bar *ngIf="blogNavSource.isLoading" mode="indeterminate">
+</mat-progress-bar>
+<mat-toolbar class='info-label' font-color='accent'></mat-toolbar>
+<button mat-button class='nav-button'>
+    <button class='nav-toggle-button' mat-icon-button disableRipple>
+        <mat-icon>home</mat-icon>
+    </button>
+    Blog home
+</button>
+<mat-tree [dataSource]="blogNavSource" [treeControl]="blogNavTreeControl">
+    <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]='20'>
+        <button mat-button class='nav-button' [routerLink]="['.']" [queryParams]="{pageKey: node.key}">
+            <button class='nav-toggle-button' mat-icon-button disabled></button>
+            {{node.title}}
+        </button>
+    </mat-tree-node>
+    <mat-tree-node *matTreeNodeDef="let node; when: _hasChildrenAndPublic" matTreeNodePadding
+        [matTreeNodePaddingIndent]='20'>
+        <button mat-button class='nav-button' [routerLink]="['.']" [queryParams]="{pageKey: node.key}">
+            <button class='nav-toggle-button' mat-icon-button matTreeNodeToggle>
+                <mat-icon>
+                    {{blogNavTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                </mat-icon>
+            </button>
+            {{node.title}}
+        </button>
+    </mat-tree-node>
+</mat-tree>

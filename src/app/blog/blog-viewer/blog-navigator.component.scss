@@ -1,0 +1,19 @@
+.nav-toggle-button {
+    transform: scale(.7); 
+}
+
+.nav-button {
+    text-align: left;
+    width: 100%;    
+    padding: 0 4px !important;   
+}
+
+.mat-tree-node{
+    height: 40px;
+    min-height: 40px !important;
+}
+
+.mat-toolbar.info-label{
+    height: calc( 1 * var(--hashcolon-titlebar-height));
+    font-size: 1em;    
+}

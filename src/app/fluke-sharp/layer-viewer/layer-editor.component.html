@@ -1,0 +1,33 @@
+<mat-expansion-panel [disabled]='isDisabled' (click)='isDisabled=isRenameLayer||false' hideToggle='true'
+    togglePosition='before' (afterExpand)='_openedLayer()' (afterCollapse)='_closedLayer()'>
+    <mat-expansion-panel-header>
+        <mat-panel-title>
+            {{type}}
+        </mat-panel-title>
+        <mat-panel-description>
+            <input matInput [(ngModel)]='label' appearance='none' (focus)='isDisabled=true;isRenameLayer=true'
+                (blur)='isDisabled=false;isRenameLayer=false' (ngModelChange)='_renameLayer($event)'>
+            <div class='buttonDiv'>
+                <button mat-icon-button (click)='_toggleLayer()'>
+                    <mat-icon>{{ manager.isVisible(label) ? 'visibility' : 'visibility_off' }}</mat-icon>
+                </button>
+                <button mat-icon-button (click)='_deleteLayer()'>
+                    <mat-icon>delete</mat-icon>
+                </button>
+            </div>
+        </mat-panel-description>
+    </mat-expansion-panel-header>
+
+    <mat-progress-bar *ngIf="!isOpened" mode="indeterminate"></mat-progress-bar>
+    <!-- <mat-spinner *ngIf="!isOpened" diameter="30" [strokeWidth]="5" mode="indeterminate"></mat-spinner> -->
+    <!-- body: lazy open -->
+    <div *ngIf="isOpened">
+        <fluke-layer-editor-geojson *ngIf="type==='GeoJSON'" [layer]='layer' [label]='label' class='fluke-contents'>
+        </fluke-layer-editor-geojson>
+
+        <fluke-layer-editor-marker *ngIf="type==='Marker'" [layer]='layer' [label]='label' class='fluke-contents'>
+        </fluke-layer-editor-marker>
+    </div>
+
+
+</mat-expansion-panel>

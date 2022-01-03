@@ -1,0 +1,160 @@
+<mat-sidenav-container class="wysiwyg">
+    <mat-sidenav #listnav mode="side" [style.width]="'20em'" opened>
+        <!-- progress bar -->
+        <mat-progress-bar *ngIf='blogNavSource.isLoading || isParentChangeMode' mode='indeterminate'></mat-progress-bar>
+        <!-- tool bar -->
+        <mat-toolbar class='info-label' font-color='accent'>
+            <button mat-icon-button color='accent' [matTooltip]="'Add new item in root.'" (click)="AddNewItem()">
+                <mat-icon>post_add</mat-icon>
+            </button>
+            <button mat-icon-button color='accent' [matTooltip]="'Delete selected item.'"
+                (click)="DeleteItem(metaPage.key)">
+                <mat-icon>delete</mat-icon>
+            </button>
+            <button mat-icon-button [color]="isParentChangeMode ? 'primary' : 'accent'"
+                [matTooltip]="isParentChangeMode ? 'Select new parent item.' : 'Change parent item.'"
+                (click)='_setParentChangeMode()'>
+                <mat-icon>low_priority</mat-icon>
+            </button>
+            <button mat-icon-button color='accent' [matTooltip]="'Renew list.'" (click)="RefreshItemList(metaPage.key)">
+                <mat-icon>refresh</mat-icon>
+            </button>
+        </mat-toolbar>
+        <!-- item list tree -->
+        <!-- Root directory -->
+        <button mat-button class='nav-button' (click)="_selectRoot()">
+            <button class='nav-toggle-button' mat-icon-button disableRipple>
+                <mat-icon>folder</mat-icon>
+            </button>
+            Root directory
+        </button>
+        <mat-tree [dataSource]="blogNavSource" [treeControl]="blogNavTreeControl">
+            <!-- node with children -->
+            <mat-tree-node *matTreeNodeDef="let node" matTreeNodePadding [matTreeNodePaddingIndent]="14">
+                <button *ngIf=" node.key !=metaPage.key" mat-button class='nav-button'
+                    (click)="_navButtonClicked(node.key)">
+                    <button class='nav-toggle-button' mat-icon-button disabled></button>
+                    {{node.title}}
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="AddNewItem(node.key)">
+                        <mat-icon>post_add</mat-icon>
+                    </button>
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="DeleteItem(node.key)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </button>
+                <button *ngIf="node.key == metaPage.key" mat-stroked-button color='primary' class='nav-button'
+                    (click)="_navButtonClicked(node.key)">
+                    <button class='nav-toggle-button' mat-icon-button disabled></button>
+                    {{node.title}}
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="AddNewItem(node.key)">
+                        <mat-icon>post_add</mat-icon>
+                    </button>
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="DeleteItem(node.key)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </button>
+            </mat-tree-node>
+            <!-- node without childeren q-->
+            <mat-tree-node *matTreeNodeDef="let node; when: _hasChildren" matTreeNodePadding
+                [matTreeNodePaddingIndent]="14">
+
+                <button *ngIf="node.key != metaPage.key" mat-button class='nav-button'
+                    (click)="_navButtonClicked(node.key)">
+                    <button class='nav-toggle-button' mat-icon-button disableRipple matTreeNodeToggle>
+                        <mat-icon>
+                            {{blogNavTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                        </mat-icon>
+                    </button>
+                    {{node.title}}
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="AddNewItem(node.key)">
+                        <mat-icon>post_add</mat-icon>
+                    </button>
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="DeleteItem(node.key)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </button>
+                <button *ngIf="node.key == metaPage.key" mat-stroked-button color='primary' class='nav-button'
+                    (click)="_navButtonClicked(node.key)">
+                    <button class='nav-toggle-button' mat-icon-button disableRipple matTreeNodeToggle>
+                        <mat-icon>
+                            {{blogNavTreeControl.isExpanded(node) ? 'expand_more' : 'chevron_right'}}
+                        </mat-icon>
+                    </button>
+                    {{node.title}}
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="AddNewItem(node.key)">
+                        <mat-icon>post_add</mat-icon>
+                    </button>
+                    <button class='nav-toggle-button hide' mat-icon-button disableRipple (click)="DeleteItem(node.key)">
+                        <mat-icon>delete</mat-icon>
+                    </button>
+                </button>
+            </mat-tree-node>
+
+        </mat-tree>
+    </mat-sidenav>
+
+    <mat-sidenav-content class=" wysiwyg"
+        [ngClass]="{'wysiwyg-horizontal': layout.layoutMode=='Horizontal', 'wysiwyg-vertical': layout.layoutMode=='Vertical'}">
+        <mat-progress-bar *ngIf='isItemLoading' mode='indeterminate'></mat-progress-bar>
+        <div [hidden]="metaPage.key==''" class="wysiwyg division editor-div"
+            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}">
+            <mat-toolbar class='info-label'>
+                <i>Blog page editor</i>
+                <span class="spacer"></span>
+                <button mat-icon-button color='primary' [matTooltip]="'Post this item'" (click)="SubmitItem()">
+                    <mat-icon>done_outline</mat-icon>
+                </button>
+            </mat-toolbar>
+
+            <!-- title -->
+            <mat-form-field class="editor title" color='accent'>
+                <mat-label>Title</mat-label>
+                <input matInput [formControl]='titleCtrl' (input)='_editTitle()' />
+            </mat-form-field>
+
+            <!-- add page check box -->
+            <mat-checkbox class="editor checkbox" [checked]='metaPage.page' (change)='_pageExistanceChanged()'>
+                Enable page contents
+            </mat-checkbox>
+
+            <!-- private check box-->
+            <mat-checkbox class="editor checkbox" [checked]='metaPage.isPrivate'
+                (change)='metaPage.isPrivate=!metaPage.isPrivate'>
+                Private page
+            </mat-checkbox>
+
+            <div class="editor" [hidden]='!metaPage.page'>
+                <!-- tool bar for page contents editing -->
+                <mat-toolbar class='info-label'>
+                    <button mat-icon-button color='accent' [matTooltip]="'Add image'">
+                        <mat-icon>panorama</mat-icon>
+                    </button>
+                    <button mat-icon-button color='accent' [matTooltip]="'Add code'">
+                        <mat-icon>code</mat-icon>
+                    </button>
+                    <span class="spacer"></span>
+                    <mat-form-field class='tags' color='accent'>
+                        <mat-label>Tags</mat-label>
+                        <input matInput [formControl]='tagsCtrl' (input)='_editTags()' />
+                    </mat-form-field>
+                </mat-toolbar>
+
+                <!-- page contents -->
+                <blog-codemirror-editor #codemirror class="editor" [(code)]='page.contents'>
+                </blog-codemirror-editor>
+            </div>
+        </div>
+
+        <mat-divider class='divider'
+            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}"
+            [vertical]="layout.layoutMode=='Horizontal'"></mat-divider>
+
+        <div [hidden]="!metaPage.page" class="wysiwyg division page-div"
+            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}">
+            <mat-toolbar class='info-label'><i>WYSISYG results</i></mat-toolbar>
+            <hashcolon-blog-page [metaPage]='metaPage' [page]='page'>
+            </hashcolon-blog-page>
+        </div>
+
+    </mat-sidenav-content>
+</mat-sidenav-container>

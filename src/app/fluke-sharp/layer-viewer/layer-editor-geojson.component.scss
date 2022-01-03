@@ -1,0 +1,10 @@
+mat-form-field{
+    width: 100%;
+}
+textarea{
+    width: 100%;
+    white-space: pre;
+    overflow-wrap: normal;    
+    overflow-x: auto; /* will make horizontal scroll-bar appear only when needed */
+    scrollbar-width: thin;
+}

@@ -1,0 +1,44 @@
+<mat-progress-bar *ngIf='isLoading' mode="indeterminate"></mat-progress-bar>
+
+<div *ngIf='!isLoading' class="wrapper">
+    <span *ngIf="metaPage && metaPage.title">
+        <b>
+            <h1 class="title">{{metaPage.title}}</h1>
+        </b>
+    </span>
+    <!-- placeholder -->
+    <span *ngIf="!(metaPage && metaPage.title)">
+        <b>
+            <h1>&nbsp;</h1>
+        </b>
+    </span>
+
+    <br />
+
+    <span class="page-datetime" *ngIf="page && page.datetimeIssued">
+        Issued: {{_getDateTimeString(page.datetimeIssued)}}
+    </span>
+    <!-- placeholder -->
+    <span *ngIf="!(page && page.datetimeIssued)">&nbsp;</span>
+    <br />
+    <span class="page-datetime" *ngIf="page && page.datetimeLastEdited">
+        Last edited: {{_getDateTimeString(page.datetimeLastEdited)}}
+    </span>
+    <!-- placeholder -->
+    <span *ngIf="!(page && page.datetimeLastEdited)">&nbsp;</span>
+
+    <br /><br />
+
+    <!-- <div HashColonInnerHtmlObserver [innerHTML]='page.contents' (innerHtmlRendered)="_refreshed()"></div> -->
+    <markdown emoji katex [data]='_sanitize(page.contents)' (ready)='_refreshed()'></markdown>
+
+    <br /><br />
+
+    <mat-chip-list class="page-tags" *ngIf="page && page.tags">
+        <mat-chip color="accent" selected *ngFor="let tag of page.tags">
+            #{{tag}}
+        </mat-chip>
+    </mat-chip-list>
+
+    <br />
+</div>

@@ -1,0 +1,14 @@
+<button mat-mini-fab [color]="blognav.opened?'':'primary'" (click)="blognav.toggle()" class="add-button">
+    <mat-icon>menu</mat-icon>
+</button>
+<mat-sidenav-container>
+
+    <mat-sidenav #blognav mode="side" [style.width]="'25em'" [opened]="layout.layoutMode=='Horizontal'">
+        <hashcolon-blog-navigator></hashcolon-blog-navigator>
+    </mat-sidenav>
+
+    <mat-sidenav-content>
+        <hashcolon-blog-page *ngIf='pageKey' [pageKey]='pageKey'>
+        </hashcolon-blog-page>
+    </mat-sidenav-content>
+</mat-sidenav-container>

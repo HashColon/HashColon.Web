@@ -1,0 +1,58 @@
+.map-viewer{
+    height: calc(100vh - 2 * var(--hashcolon-titlebar-height));
+    padding: 0;        
+}
+
+.leaflet-map{
+    height: calc(100vh - 3 * var(--hashcolon-titlebar-height));    
+    padding: 0;
+    z-index: 0;      
+}
+
+.footer {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    z-index: 0;        
+}
+
+mat-toolbar{
+    height: var(--hashcolon-titlebar-height);
+}
+
+mat-sidenav-container{
+    height: 100%;    
+}
+
+$initial-sidenav-width: 300px;
+
+mat-sidenav{
+    z-index: 3;    
+    width: $initial-sidenav-width;    
+    scrollbar-width: thin;
+}
+
+.resize-handle{
+    display: block;
+    width: 20px !important;
+    // height: calc(100vh - 2* var(--hashcolon-titlebar-height));        
+    z-index: 20;
+    position: fixed;
+    right: $initial-sidenav-width;    
+    cursor   : col-resize;
+
+    min-width: 0px !important;    
+    padding: 0px !important;
+    
+}
+
+.dragtest{
+    position: fixed;    
+    z-index: 10;
+    right: 0px;
+}
+
+.spacer{
+    flex: 1 1 auto;
+}

@@ -1,0 +1,23 @@
+<mat-form-field appearance='outline'>
+    <mat-label>GeoJSON Code
+        <mat-icon [color]="_isFormError()?'warn':'primary'">{{ _isFormError() ? 'error_outline' : 'check_circle_outline'
+            }}</mat-icon>
+    </mat-label>
+
+    <textarea matInput [formControl]='formControl' [errorStateMatcher]='errorChecker' (input)='_editLayerSynced()'
+        cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="5" cdkAutosizeMaxRows="50">
+    <!-- <textarea matInput [formControl]='formControl' [errorStateMatcher]='errorChecker' (input)='_editLayerSynced()'
+        cdkAutosizeMinRows="5" cdkAutosizeMaxRows="50"> -->
+    </textarea>
+    <mat-error *ngIf="formControl.hasError('jsonInvalid') && !formControl.hasError('required')">
+        Invalid JSON syntax
+    </mat-error>
+    <mat-error *ngIf="formControl.hasError('geoJsonInvalid') && !formControl.hasError('required')">
+        Invalid GeoJSON syntax
+    </mat-error>
+    <mat-error *ngIf="formControl.hasError('required')">
+        JSON Code is empty
+    </mat-error>
+
+
+</mat-form-field>

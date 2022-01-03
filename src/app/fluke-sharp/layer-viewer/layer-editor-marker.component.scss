@@ -1,0 +1,22 @@
+.full-width{
+    width: 100%;    
+}
+input{
+    width: 100%;    
+}
+mat-form-field{
+    width:100%;
+}
+
+.half-width{
+    width:calc(50% - 1.5em);    
+}
+
+::ng-deep .mat-form-field-infix{
+    width:100% !important;
+}
+
+.divider{
+    width:3em;
+    text-align: center;
+}

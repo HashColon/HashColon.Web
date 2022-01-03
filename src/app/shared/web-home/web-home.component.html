@@ -1,0 +1,16 @@
+<div class='card-wrapper'>
+    <mat-card *ngFor='let cardname of modules_ordered' (click)='_navigateTo(moduleList[cardname])'>
+        <mat-card-header>
+            <!-- <div mat-card-avatar class="example-header-image"></div> -->
+            <mat-card-title>{{moduleList[cardname].menuStr}}</mat-card-title>
+            <!-- <mat-card-subtitle>Dog Breed</mat-card-subtitle> -->
+        </mat-card-header>
+
+        <!-- should be added later -->
+
+        <!-- <img mat-card-image src="card.imgsrc"> -->
+        <mat-card-content>
+            {{moduleList[cardname].explanation}}
+        </mat-card-content>
+    </mat-card>
+</div>

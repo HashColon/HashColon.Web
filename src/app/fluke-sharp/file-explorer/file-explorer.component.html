@@ -1,0 +1,17 @@
+<span *ngIf="!backend.isSocketReady">
+    <i>
+        Backend server not ready. <br />
+        Connect backend server.
+    </i>
+</span>
+
+
+
+<ng-container *ngIf="backend.isSocketReady">
+    <mat-selection-list #geojsonList="matSelectionList" [(ngModel)]="action.selectedFiles">
+        <mat-list-option *ngFor='let afile of action.geojsonFiles' [value]='afile'>
+            {{afile}}
+        </mat-list-option>
+    </mat-selection-list>
+
+</ng-container>

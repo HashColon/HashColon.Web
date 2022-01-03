@@ -1,0 +1,49 @@
+<table class="full-width" cellspacing="0">
+    <tr class="full-width">
+        <td class="half-width">
+            <mat-form-field (click)="$event.stopPropagation();">
+                <mat-label>Lat</mat-label>
+                <input matInput [formControl]='latFormControl' [errorStateMatcher]='latErrorChecker'
+                    (input)='_editLayerSynced()'>
+                <button matPrefix mat-icon-button [color]="_isLatFormError()?'warn':'primary'">
+                    <mat-icon>{{ _isFormError() ? 'error_outline' : 'check_circle_outline' }}</mat-icon>
+                </button>
+                <span matSuffix>deg</span>
+                <mat-error *ngIf="latFormControl.hasError('latInvalid') && !latFormControl.hasError('required')">
+                    Latitude must be in between [-180,180]
+                </mat-error>
+                <mat-error *ngIf="latFormControl.hasError('notNumber') && !latFormControl.hasError('required')">
+                    Latitude must be a number
+                </mat-error>
+                <mat-error *ngIf="latFormControl.hasError('required')">
+                    Latitude is empty
+                </mat-error>
+            </mat-form-field>
+        </td>
+        <td class="divider">
+            <b>
+                /
+            </b>
+        </td>
+        <td class="half-width">
+            <mat-form-field (click)="$event.stopPropagation();">
+                <mat-label>Lon</mat-label>
+                <input matInput [formControl]='lngFormControl' [errorStateMatcher]='lngErrorChecker'
+                    (input)='_editLayerSynced()'>
+                <button matPrefix mat-icon-button [color]="_isLngFormError()?'warn':'primary'">
+                    <mat-icon>{{ _isFormError() ? 'error_outline' : 'check_circle_outline' }}</mat-icon>
+                </button>
+                <span matSuffix>deg</span>
+                <mat-error *ngIf="lngFormControl.hasError('latInvalid') && !lngFormControl.hasError('required')">
+                    Longitude must be in between [-90,90]
+                </mat-error>
+                <mat-error *ngIf="lngFormControl.hasError('notNumber') && !lngFormControl.hasError('required')">
+                    Longitude must be a number
+                </mat-error>
+                <mat-error *ngIf="lngFormControl.hasError('required')">
+                    Longitude is empty
+                </mat-error>
+            </mat-form-field>
+        </td>
+    </tr>
+</table>

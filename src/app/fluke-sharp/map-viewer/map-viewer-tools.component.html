@@ -1,0 +1,33 @@
+<mat-form-field class="map-goto">
+    <mat-label>Go to</mat-label>
+    <!-- <input matInput type="text" placeholder="~" aria-label="Go to" [formControl]="mapGotoCtrl"
+        (input)='_mapGoto()'> -->
+    <input matInput type="text" placeholder="location:[lon,lat], place name, & etc." aria-label="Go to">
+
+</mat-form-field>
+
+<button mat-icon-button matTooltip="Place a position picker" (click)="action.isPickPos=!action.isPickPos">
+    <mat-icon [color]="action.isPickPos?'primary':''">add_location_alt</mat-icon>
+</button>
+
+<button mat-icon-button [matMenuTriggerFor]="maptiles" matTooltip="Change base map tiles.">
+    <mat-icon>layers</mat-icon>
+</button>
+
+<button mat-icon-button
+    [matTooltip]="action.isNauticalChartVisible?'Nautical chart visualized':'Nautical chart hidden'">
+    <mat-icon [color]="action.isNauticalChartVisible?'accent':'warn'" (click)="action.ToggleNauticalChartTiles()">
+        anchor
+    </mat-icon>
+    <!-- change map options, default styles for layers & etc.-->
+</button>
+
+<button mat-icon-button>
+    <mat-icon>settings_applications</mat-icon>
+    <!-- change map options, default styles for layers & etc.-->
+</button>
+
+<mat-menu #maptiles="matMenu">
+    <button *ngFor="let maptile of action.mapTiles | keyvalue" mat-menu-item
+        (click)='action.ToggleMapTiles(maptile.value)'> {{maptile.key}} </button>
+</mat-menu>

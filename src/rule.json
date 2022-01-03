@@ -1,0 +1,23 @@
+{
+    "rules": {
+        ".read": true,
+        ".write": "root.child('admin').hasChild(auth.uid)",
+        "HashColonBlog": {
+            "PageList": {
+                ".indexOn": "parent",
+                "$id": {
+                    ".read": "                (data.child('private').val() == true && root.child('admin').hasChild(auth.uid))                 || data.child('private').val() == false                 || !data.hasChild('private')"
+                }
+            },
+            "Pages": {
+                "$id": {
+                    ".read": "                    (data.child('private').val() == true && root.child('admin').hasChild(auth.uid))                     || data.child('private').val() == false                     || !data.hasChild('private')"
+                }
+            }
+        },
+        "admin": {
+            ".read": false,
+            ".write": false
+        }
+    }
+}

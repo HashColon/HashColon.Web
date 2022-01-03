@@ -1,0 +1,59 @@
+<mat-toolbar>
+    <button mat-icon-button (click)='editorwindow.toggle()' [color]="editorwindow.opened ? 'primary': ''">
+        <mat-icon>menu</mat-icon>
+    </button>
+
+    <ng-container *ngFor="let func of functionTypes">
+        <button *ngIf="currentFunction!=func" mat-button (click)="SetFunction(func)">{{func}}</button>
+        <button *ngIf="currentFunction==func" mat-stroked-button color='accent'
+            (click)="SetFunction(func)">{{func}}</button>
+    </ng-container>
+
+    <span class='spacer'></span>
+    <mat-spinner *ngIf="_isLoading()" diameter="30" [strokeWidth]="5" mode="indeterminate"></mat-spinner>
+
+</mat-toolbar>
+
+<div class="handleBound">
+    <div #dragHandle cdkDrag cdkDragHandle cdkDragLockAxis='x' (cdkDragMoved)="_dragToResizeEditor($event)"
+        cdkDragBoundary=".handleBound" class="resize-handle" [style.visibility]="showDragHandle ? 'visible':'hidden'">
+        <mat-icon color='accent'>more_vert</mat-icon>
+    </div>
+
+    <mat-sidenav-container hasBackdrop='false'>
+        <mat-sidenav #editorwindow mode="over" position="end" [(opened)]="editorOpened" disableClose='true'
+            [style.width]="editorWindowWidth" (openedChange)="_finishedToggle()" (closedStart)="_startClosing()">
+
+            <!-- functions -->
+            <fluke-layer-viewer [style.display]="currentFunction=='Layers'?'inline':'none'"></fluke-layer-viewer>
+            <fluke-file-explorer [style.display]="currentFunction=='File explorer'?'inline':'none'">
+            </fluke-file-explorer>
+            <fluke-map-viewer [style.display]="currentFunction=='Map'?'inline':'none'"></fluke-map-viewer>
+
+
+        </mat-sidenav>
+        <mat-sidenav-content>
+            <div class="map-viewer">
+
+                <!-- leaflet map -->
+                <div leaflet class="leaflet-map" [leafletOptions]="mapFunc.GetInitialOption()"
+                    [leafletLayers]="layers.visible" (leafletMapReady)="mapFunc.OnMapReady($event)"
+                    (leafletClick)="mapFunc.OnMapClick($event)"></div>
+
+                <!-- bottom-toolbar -->
+                <mat-toolbar class="footer">
+
+                    <fluke-layer-viewer-tools *ngIf="currentFunction=='Layers'"></fluke-layer-viewer-tools>
+                    <fluke-file-explorer-tools *ngIf="currentFunction=='File explorer'"></fluke-file-explorer-tools>
+                    <fluke-map-viewer-tools *ngIf="currentFunction=='Map'"></fluke-map-viewer-tools>
+
+
+                </mat-toolbar>
+            </div>
+
+
+        </mat-sidenav-content>
+
+    </mat-sidenav-container>
+
+</div>

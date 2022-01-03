@@ -1,0 +1,116 @@
+
+.wrapper{
+    width:calc(100% - 40px);        
+    max-width: 1280px;
+    padding: 40px 20px 20px 20px;    
+    margin: auto; 
+    overflow: hidden;    
+    word-break: break-word;
+    word-wrap: break-word;
+    white-space: normal;
+}
+
+.page-datetime{
+    font-family: Lato-Italic ;
+    font-size: 0.8em;    
+    float: right; 
+}
+
+.page-topic{
+    font-family: Lato-Italic ;    
+    font-size: 1.5em;
+    float: right;  
+    margin: 0.5em 0 0.5em 0;  
+}
+
+.page-tags{    
+    margin: 2em 0 2em 0;  
+}
+
+h1.title{
+    font-family: Lato-BlackItalic, 'Jal Haru', 'Jal Onuel';
+    font-size: 3em;    
+}
+
+/* page text tags styles */
+$txt-accent-color: #e08bad;
+$txt-disabled-color: gray;
+$txt-link-color: #a273cd;
+$txt-linkvisited-color: #a18ab0;
+$box-blockquote-color: #c93671;
+$box-table-color: gray;
+$box-width: 90%;
+
+// Strong: bold & underline
+strong{
+    font-weight: bold;
+    text-decoration: underline;
+    color: $txt-accent-color;
+}
+
+// emphasize: italic
+em {    
+    color: $txt-accent-color;
+}
+
+// comments: italic with blur
+i{    
+    color: $txt-disabled-color;
+}
+
+// cross-outs
+del {
+    color: $txt-disabled-color;
+}
+
+// code
+code {
+    font-family: 'Source Code Pro', Consolas;
+}
+
+// hyperlink
+a:link{
+    color: $txt-link-color;
+}
+a:visited{
+    color: $txt-linkvisited-color;
+}
+
+// block quotes
+markdown > blockquote{
+    margin-left: calc(50% - .5 * $box-width);
+    margin-right: calc(50% - .5 * $box-width);    
+}
+blockquote > blockquote{
+    margin: 0;    
+}
+blockquote {
+    border: 1px solid $box-blockquote-color;    
+    padding: 1em ;    
+    border-left: .5em solid $box-blockquote-color;
+    background-color: #424242;
+}
+
+// image
+img {     
+    width: $box-width;
+    margin: 2em calc(50% - .5 * $box-width);
+}
+
+// table
+table {
+    border-top: medium solid $box-table-color;
+    border-bottom: medium solid $box-table-color;
+    border-collapse: collapse;    
+    width: $box-width;    
+    margin-left: calc(50% - .5 * $box-width);
+    margin-right: calc(50% - .5 * $box-width); 
+}
+thead{
+    border-bottom: thin solid $box-table-color;
+    line-height: 2.5em;
+}
+tbody{
+    border-top: thin solid $box-table-color;
+    line-height: 2em;
+}

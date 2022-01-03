@@ -1,0 +1,32 @@
+<span *ngIf="!backend.isSocketReady"><i>Backend server not ready. Connect backend server.</i></span>
+
+<ng-container *ngIf="backend.isSocketReady">
+
+    <mat-form-field class="path-input">
+        <mat-label>Current directory</mat-label>
+        <input matInput type="text" placeholder="~" aria-label="Current directory" [formControl]="pathCtrl"
+            [matAutocomplete]="pathAutoComplete" (input)='_editPathSynced()'>
+        <mat-autocomplete #pathAutoComplete="matAutocomplete" (optionSelected)="_editPathSynced()">
+            <mat-option *ngFor="let path of action.pathCandidateList" [value]="path" class="path-candidate">
+                {{path}}
+            </mat-option>
+        </mat-autocomplete>
+    </mat-form-field>
+
+    <button mat-icon-button (click)='_setPathHome()'>
+        <mat-icon>home</mat-icon>
+    </button>
+    <button mat-icon-button (click)="_selectAll()">
+        <mat-icon>check_box</mat-icon>
+    </button>
+    <button mat-icon-button (click)="_deselectAll()">
+        <mat-icon>indeterminate_check_box</mat-icon>
+    </button>
+    <button mat-icon-button (click)='_editPathSynced()'>
+        <mat-icon>autorenew</mat-icon>
+    </button>
+    <button mat-icon-button (click)='_requestSelectedGeoJson()'>
+        <mat-icon>library_add</mat-icon>
+    </button>
+
+</ng-container>

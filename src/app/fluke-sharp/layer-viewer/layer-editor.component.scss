@@ -1,0 +1,44 @@
+mat-expansion-panel{
+  width: 100%;
+}
+mat-expansion-panel-header{
+  width: 100%;
+}
+mat-panel-title{
+  width:30%;
+}
+mat-panel-description{
+  width: 100%;
+}
+
+mat-panel-description input{
+  background: inherit;
+  color: inherit;
+  border: 0;
+  font: inherit;    
+  width: calc(100% - 5em);
+}
+
+.buttonDiv{
+  position: relative;  
+  float: right;
+  width: 3.5em;
+  text-align: center;
+}
+
+.mat-icon-button {  
+  width: 1.7em;
+  height: 1.7em;
+  line-height: 1.5em;    
+
+  .mat-icon {
+    font-size: 1.2em;
+    width: 1.2em;
+    height: 1.2em;
+    line-height: 1.2em;
+  }
+}
+
+.fluke-contents{
+  display:inherit;
+}

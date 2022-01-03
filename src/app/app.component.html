@@ -1,0 +1,36 @@
+<mat-toolbar color="primary">
+
+  <button mat-button *ngFor='let item of modules_ordered' [matTooltip]="modules[item].tooltip??''"
+    (click)='_navigateTo(item)'>
+    <mat-icon *ngIf='modules[item].menuIcon'>{{modules[item].menuIcon}}</mat-icon>
+    <span *ngIf='modules[item].menuStr'>{{modules[item].menuStr}}</span>
+  </button>
+
+  <span class=" spacer"></span>
+
+  <button *ngIf='auth.IsAdminAuth()' mat-icon-button (click)="_test()">
+    <mat-icon>bug_report</mat-icon>
+  </button>
+
+  <button *ngIf='auth.IsAdminAuth()' mat-icon-button [routerLink]="['Blog/editor']" [matTooltip]="'Goto blog editor.'">
+    <mat-icon>post_add</mat-icon>
+  </button>
+
+  <button mat-icon-button (click)='_tryAdmin()' [matTooltip]="auth.IsAdminAuth()?'Sign-out admin':'Sign-in as admin'">
+    <mat-icon [color]="auth.IsAdminAuth()?'accent':'warn'">manage_accounts</mat-icon>
+  </button>
+
+  <button *ngIf='auth.IsAdminAuth()' mat-icon-button color="basic" [matMenuTriggerFor]="backendConnector"
+    matTooltip="Set backend server connection">
+    <mat-icon [color]="backend.isSocketReady?'accent':'warn'">dns</mat-icon>
+  </button>
+
+</mat-toolbar>
+<div class="contents">
+  <router-outlet></router-outlet>
+</div>
+
+<mat-menu #backendConnector="matMenu" [hasBackdrop]="false" (click)="$event.stopPropagation();"
+  class="backendConnector">
+  <hashcolon-backend-connector-viewer class="backendConnector"></hashcolon-backend-connector-viewer>
+</mat-menu>

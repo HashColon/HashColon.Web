@@ -1,0 +1,14 @@
+{
+  "targets": {
+    "hashcolon-wchyoo": {
+      "hosting": {
+        "HashColon": [
+          "hashcolon-wchyoo"
+        ]
+      }
+    }
+  },
+  "projects": {
+    "default": "hashcolon-wchyoo"
+  }
+}

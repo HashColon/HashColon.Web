@@ -1,0 +1,37 @@
+/* You can add global styles to this file, and also import other style files */
+
+html, body { height: 100%; }
+body { margin: 0; font-family: Roboto, "Helvetica Neue", sans-serif; scrollbar-width: thin;}
+
+:root{
+--hashcolon-titlebar-height: 50px;
+}
+
+@font-face{
+    font-family: 'Source Code Pro';
+    src: url(assets/fonts/SourceCodePro-Regular.otf) format("opentype");
+}
+
+@font-face{
+    font-family: 'Lato-BlackItalic';
+    src: url(assets/fonts/Lato-BlackItalic.ttf) format("truetype");
+}
+
+@font-face{
+    font-family: 'Lato-Italic';
+    src: url(assets/fonts/Lato-Italic.ttf) format("truetype");
+}
+
+@font-face {
+    font-family: 'Jal Onuel';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Onuel.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}
+
+@font-face {
+    font-family: 'Jal Haru';
+    src: url('https://cdn.jsdelivr.net/gh/projectnoonnu/noonfonts_20-10-21@1.0/Jal_Haru.woff') format('woff');
+    font-weight: normal;
+    font-style: normal;
+}

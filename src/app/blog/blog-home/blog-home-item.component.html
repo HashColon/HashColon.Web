@@ -1,0 +1,16 @@
+<mat-card class="page-item">
+    <mat-card-header>
+        <mat-card-title>{{_shortenTitle(40)}}</mat-card-title>
+        <mat-card-subtitle>
+            <mat-chip-list class="page-tags" *ngIf="page && page.tags">
+                <mat-chip color="accent" selected *ngFor="let tag of page.tags">
+                    #{{tag}}
+                </mat-chip>
+            </mat-chip-list>
+        </mat-card-subtitle>
+    </mat-card-header>
+    <img mat-card-image [src]="page.thumbnail">
+    <mat-card-content>
+        {{_shortenContents(200)}}
+    </mat-card-content>
+</mat-card>
