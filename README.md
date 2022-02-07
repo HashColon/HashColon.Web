@@ -13,14 +13,14 @@ This project consists of two distinct subprojects:
         * Refer to __Path options__ at https://leafletjs.com/reference.html#path 
         * Styling example:
         
-        {
+        `{
             "color": "#663399", 
             "weight": 3
-        }
+        }`
         
     * __Go to__ function implemented
         * Map => (bottom tool bar) Go to
-        * Give latitude and longitude to move the center of the view. __Latitude should come first!__ All examples below are available.
+        * Give latitude and longitude to move the center of the view. __Latitude should come first!__ All following examples are available: 
             `38, 127`
             `[38, 127]`
             `{38, 127}`
