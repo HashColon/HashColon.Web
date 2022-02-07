@@ -1,18 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
-import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
-
+import { FormControl, Validators } from '@angular/forms';
 import { GeoJSON, Layer } from 'leaflet';
-
 import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
-import { GeoJsonValidator } from '@FlukeSharp/services/geojson-validator';
-
-export class GeoJsonErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+import { GeoJsonErrorStateMatcher, GeoJsonValidator } from '@FlukeSharp/services/geojson-validator';
 
 @Component({
   selector: 'fluke-layer-editor-geojson',
@@ -55,7 +46,7 @@ export class LayerEditorGeojsonComponent implements OnInit {
     }
   }
 
-  constructor(public manager: LayerManagerService) { }
+  constructor(private manager: LayerManagerService) { }
 
   ngOnInit(): void {
     // if layer is not given

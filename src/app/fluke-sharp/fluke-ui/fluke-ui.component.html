@@ -1,5 +1,6 @@
 <mat-toolbar>
-    <button mat-icon-button (click)='editorwindow.toggle()' [color]="editorwindow.opened ? 'primary': ''">
+    <!-- <button mat-icon-button (click)='editorwindow.toggle()' [color]="editorwindow.opened ? 'primary': ''"> -->
+    <button mat-icon-button (click)='editorwindow.toggle()' [color]="editorOpened ? 'primary': ''">
         <mat-icon>menu</mat-icon>
     </button>
 
@@ -36,9 +37,9 @@
             <div class="map-viewer">
 
                 <!-- leaflet map -->
-                <div leaflet class="leaflet-map" [leafletOptions]="mapFunc.GetInitialOption()"
-                    [leafletLayers]="layers.visible" (leafletMapReady)="mapFunc.OnMapReady($event)"
-                    (leafletClick)="mapFunc.OnMapClick($event)"></div>
+                <div leaflet class="leaflet-map" [leafletOptions]="_getLeafletInitialOption()"
+                    [leafletLayers]="_getVisibleLayers()" (leafletMapReady)="_onMapReady($event)"
+                    (leafletClick)="_onMapClick($event)"></div>
 
                 <!-- bottom-toolbar -->
                 <mat-toolbar class="footer">

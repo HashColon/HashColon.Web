@@ -2,21 +2,21 @@
     <mat-label>Go to</mat-label>
     <!-- <input matInput type="text" placeholder="~" aria-label="Go to" [formControl]="mapGotoCtrl"
         (input)='_mapGoto()'> -->
-    <input matInput type="text" placeholder="location:[lon,lat], place name, & etc." aria-label="Go to">
-
+    <input matInput type="text" [formControl]="formControl" placeholder="location:[lat, lon], zoom, place name, & etc."
+        (change)="Goto()">
+    <mat-hint align="start">Ex) [35.2, 127.6] zoom: 10 </mat-hint>
 </mat-form-field>
 
-<button mat-icon-button matTooltip="Place a position picker" (click)="action.isPickPos=!action.isPickPos">
-    <mat-icon [color]="action.isPickPos?'primary':''">add_location_alt</mat-icon>
+<button mat-icon-button matTooltip="Place a position picker" (click)="TogglePickPosMode()">
+    <mat-icon [color]="IsPickPosMode()?'primary':''">add_location_alt</mat-icon>
 </button>
 
 <button mat-icon-button [matMenuTriggerFor]="maptiles" matTooltip="Change base map tiles.">
     <mat-icon>layers</mat-icon>
 </button>
 
-<button mat-icon-button
-    [matTooltip]="action.isNauticalChartVisible?'Nautical chart visualized':'Nautical chart hidden'">
-    <mat-icon [color]="action.isNauticalChartVisible?'accent':'warn'" (click)="action.ToggleNauticalChartTiles()">
+<button mat-icon-button [matTooltip]="IsNauticalChartVisible()?'Nautical chart visualized':'Nautical chart hidden'">
+    <mat-icon [color]="IsNauticalChartVisible()?'accent':'warn'" (click)="ToggleNauticalChart()">
         anchor
     </mat-icon>
     <!-- change map options, default styles for layers & etc.-->
@@ -28,6 +28,6 @@
 </button>
 
 <mat-menu #maptiles="matMenu">
-    <button *ngFor="let maptile of action.mapTiles | keyvalue" mat-menu-item
-        (click)='action.ToggleMapTiles(maptile.value)'> {{maptile.key}} </button>
+    <button *ngFor="let maptile of GetMapTiles() | keyvalue" mat-menu-item (click)='ToggleMapTiles(maptile.value)'>
+        {{maptile.key}} </button>
 </mat-menu>

@@ -9,7 +9,7 @@
                 (blur)='isDisabled=false;isRenameLayer=false' (ngModelChange)='_renameLayer($event)'>
             <div class='buttonDiv'>
                 <button mat-icon-button (click)='_toggleLayer()'>
-                    <mat-icon>{{ manager.isVisible(label) ? 'visibility' : 'visibility_off' }}</mat-icon>
+                    <mat-icon>{{ _isVisible(label) ? 'visibility' : 'visibility_off' }}</mat-icon>
                 </button>
                 <button mat-icon-button (click)='_deleteLayer()'>
                     <mat-icon>delete</mat-icon>
@@ -22,6 +22,7 @@
     <!-- <mat-spinner *ngIf="!isOpened" diameter="30" [strokeWidth]="5" mode="indeterminate"></mat-spinner> -->
     <!-- body: lazy open -->
     <div *ngIf="isOpened">
+        <flukesharp-layer-style-editor class='fluke-contents' [label]='label'></flukesharp-layer-style-editor>
         <fluke-layer-editor-geojson *ngIf="type==='GeoJSON'" [layer]='layer' [label]='label' class='fluke-contents'>
         </fluke-layer-editor-geojson>
 

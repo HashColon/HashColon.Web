@@ -13,12 +13,11 @@ export var LayerTypes: { [key: string]: any } = {
 export class LayerManagerService {
 
   labeled: { [key: string]: Layer } = {};
+  userstyles: { [key: string]: any } = {};
   visible: Layer[] = [];
   autoStyle: boolean = false;
 
   constructor() {
-    // set default styles
-
   }
 
   stylefunc_Auto(val: number) {
@@ -43,26 +42,33 @@ export class LayerManagerService {
 
   setAllGeoJsonStyles_Auto() {
     // count geojson layers in visibile
-    var geojsoncnt = 0;
-    for (var lidx in this.visible) {
-      if (this.visible[lidx] instanceof GeoJSON) {
-        geojsoncnt++;
+    var autostylecnt = 0;
+    for (var label in this.labeled) {
+      if (this.isVisible(label) && !this.hasUserStyle(label)) {
+        autostylecnt++;
       }
     }
 
     var cnt = 0;
-    for (var lidx in this.visible) {
-      if (this.visible[lidx] instanceof GeoJSON) {
-        (this.visible[lidx] as GeoJSON).setStyle(this.stylefunc_Auto(cnt / geojsoncnt));
-        cnt++
+    for (var label in this.labeled) {
+      if (this.isVisible(label) && !this.hasUserStyle(label)) {
+        if (this.labeled[label] instanceof GeoJSON) {
+          (this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Auto(cnt / autostylecnt));
+          cnt++
+        }
       }
     }
   }
 
-  setAllGeoJsonStyles_Reset() {
-    for (var lidx in this.visible) {
-      if (this.visible[lidx] instanceof GeoJSON) {
-        (this.visible[lidx] as GeoJSON).resetStyle();
+  setAllGeoJsonStyles_Manual() {
+    for (var label in this.labeled) {
+      if (this.labeled[label] instanceof GeoJSON) {
+        if (this.hasUserStyle(label)) {
+          (this.labeled[label] as GeoJSON).setStyle((feature) => this.userstyles[label]);
+        }
+        else {
+          (this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Manual);
+        }
       }
     }
   }
@@ -73,7 +79,7 @@ export class LayerManagerService {
       this.setAllGeoJsonStyles_Auto();
     }
     else {
-      this.setAllGeoJsonStyles_Reset();
+      this.setAllGeoJsonStyles_Manual();
     }
   }
 
@@ -85,6 +91,11 @@ export class LayerManagerService {
 
     this.labeled[newlabel] = this.labeled[label];
     delete this.labeled[label];
+
+    if (this.hasUserStyle(label)) {
+      this.userstyles[newlabel] = this.userstyles[label];
+      delete this.userstyles[label];
+    }
 
     return true;
   }
@@ -104,6 +115,10 @@ export class LayerManagerService {
     return label in this.labeled;
   }
 
+  hasUserStyle(label: string): boolean {
+    return this.hasLabel(label) && (label in this.userstyles);
+  }
+
   // remove layer from visible (not recommended to use this function. use toggleLayer instead.)
   hideLayer(label: string): boolean {
     if (this.hasLabel(label)) {
@@ -116,7 +131,9 @@ export class LayerManagerService {
 
   // inserts a new layer. 
   // if a layer with the given label exists, does return true. else, return false.
-  pushLayer(layer: Layer, label: string, options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false }): boolean {
+  pushLayer(layer: Layer, label: string,
+    options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false },
+    userstyle?: any): boolean {
 
     var newlabel: string = label === null ? '' : label.trim();
 
@@ -137,6 +154,11 @@ export class LayerManagerService {
     // add new labeled layer
     this.labeled[newlabel] = layer;
 
+    // if user style is given, add it
+    if (userstyle) {
+      this.userstyles[newlabel] = userstyle;
+    }
+
     // if the layer is set as visible, make it visible.
     if (!options.hide) {
       this.visible.push(this.labeled[newlabel]);
@@ -148,17 +170,48 @@ export class LayerManagerService {
     return true;
   }
 
-  pushGeoJsonLayer(geoJsonObj: any, label: string, options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false }): boolean {
-    //check if style exists.
+  pushGeoJsonLayer(geoJsonObj: any, label: string,
+    options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false },
+    userstyle?: any): boolean {
+    // create a empty geojson layer 
+
+    // return this.pushLayer(newlayer, label, options);
     return this.pushLayer(
-      new GeoJSON(geoJsonObj,
-        {
-          style: this.stylefunc_Manual
-        }
-      ),
-      label, options);
+      new GeoJSON(geoJsonObj, { style: this.stylefunc_Manual }),
+      label, options, userstyle);
+
   }
 
+  pushUserStyle(userstyle: any, label: string) {
+    if (this.hasLabel(label)) {
+      this.userstyles[label] = userstyle;
+      if (this.labeled[label] instanceof GeoJSON) {
+        // first reset to initial state
+        (this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Manual);
+        // then change to user styles
+        (this.labeled[label] as GeoJSON).setStyle(() => this.userstyles[label]);
+      }
+      return true;
+    }
+    else return false;
+  }
+
+  editUserStyle(userstyle: any, label: string) {
+    return this.pushUserStyle(userstyle, label);
+  }
+
+  removeUserStyle(label: string) {
+    if (this.hasUserStyle(label)) {
+      delete this.userstyles[label];
+
+      if (this.labeled[label] instanceof GeoJSON) {
+        (this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Manual);
+      }
+
+      return true;
+    }
+    else return false;
+  }
 
   // edits a existing layer. 
   // if a layer with the given label exists, return true. else, return false.
@@ -202,7 +255,7 @@ export class LayerManagerService {
     if (!this.hasLabel(label)) {
       return false;
     }
-    else {
+    else if (this.labeled[label] instanceof GeoJSON) {
 
       // if the layer is visible, make it invisible
       var checktoggle: boolean;
@@ -214,15 +267,9 @@ export class LayerManagerService {
         checktoggle = false;
       }
 
-      // if the layer is type of layer group, edit the layer inside the group
-      // if the layer is type of layer group, edit the layer inside the group
-      if (this.labeled[label] instanceof LayerGroup) {
-        (this.labeled[label] as LayerGroup).clearLayers();
-        (this.labeled[label] as LayerGroup).addLayer(
-          new GeoJSON(geoJsonObj, {
-            style: this.stylefunc_Manual
-          }));
-      }
+
+      (this.labeled[label] as GeoJSON).clearLayers();
+      (this.labeled[label] as GeoJSON).addData(geoJsonObj);
 
 
       // if the layer was visible, turn it back on.
@@ -235,6 +282,7 @@ export class LayerManagerService {
 
       return true;
     }
+    else return false;
   }
 
   // remove layer with the given label
@@ -245,6 +293,11 @@ export class LayerManagerService {
         this.hideLayer(label);
       }
       delete this.labeled[label];
+
+      // if userstyle exists, remove it
+      if (this.hasUserStyle(label)) {
+        delete this.userstyles[label];
+      }
 
       // if autoStyle is on, apply it.
       if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
@@ -276,6 +329,7 @@ export class LayerManagerService {
     this.visible = [];
     //delete this.labeled;
     this.labeled = {};
+    this.userstyles = {};
   }
 
   hideAll(): void {

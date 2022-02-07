@@ -7,8 +7,6 @@ import { Marker, Layer } from 'leaflet';
 import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
 import { LatValidator, LngValidator } from '@FlukeSharp/services/geojson-validator';
 
-import * as leafletSetting from '@FlukeSharp/services/leaflet-custom-settings';
-
 export class LatErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -68,7 +66,7 @@ export class LayerEditorMarkerComponent implements OnInit {
     }
   }
 
-  constructor(public manager: LayerManagerService) { }
+  constructor(private manager: LayerManagerService) { }
 
   ngOnInit(): void {
 

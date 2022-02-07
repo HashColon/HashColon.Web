@@ -10,7 +10,6 @@ const routes: Routes = [
     path: 'img',
     children: [{
       path: '**', component: ImageComponent
-
     }]
   }
 ];

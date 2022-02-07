@@ -94,10 +94,10 @@
     </mat-sidenav>
 
     <mat-sidenav-content class=" wysiwyg"
-        [ngClass]="{'wysiwyg-horizontal': layout.layoutMode=='Horizontal', 'wysiwyg-vertical': layout.layoutMode=='Vertical'}">
+        [ngClass]="{'wysiwyg-horizontal': _getLayoutMode()=='Horizontal', 'wysiwyg-vertical': _getLayoutMode()=='Vertical'}">
         <mat-progress-bar *ngIf='isItemLoading' mode='indeterminate'></mat-progress-bar>
         <div [hidden]="metaPage.key==''" class="wysiwyg division editor-div"
-            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}">
+            [ngClass]="{vertical: _getLayoutMode()=='Vertical', horizontal: _getLayoutMode()=='Horizontal'}">
             <mat-toolbar class='info-label'>
                 <i>Blog page editor</i>
                 <span class="spacer"></span>
@@ -146,11 +146,11 @@
         </div>
 
         <mat-divider class='divider'
-            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}"
-            [vertical]="layout.layoutMode=='Horizontal'"></mat-divider>
+            [ngClass]="{vertical: _getLayoutMode()=='Vertical', horizontal: _getLayoutMode()=='Horizontal'}"
+            [vertical]="_getLayoutMode()=='Horizontal'"></mat-divider>
 
         <div [hidden]="!metaPage.page" class="wysiwyg division page-div"
-            [ngClass]="{vertical: layout.layoutMode=='Vertical', horizontal: layout.layoutMode=='Horizontal'}">
+            [ngClass]="{vertical: _getLayoutMode()=='Vertical', horizontal: _getLayoutMode()=='Horizontal'}">
             <mat-toolbar class='info-label'><i>WYSISYG results</i></mat-toolbar>
             <hashcolon-blog-page [metaPage]='metaPage' [page]='page'>
             </hashcolon-blog-page>

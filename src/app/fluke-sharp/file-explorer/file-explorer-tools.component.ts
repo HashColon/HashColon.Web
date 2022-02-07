@@ -14,8 +14,8 @@ export class FileExplorerToolsComponent implements OnInit {
   pathCtrl: FormControl = new FormControl();
 
   constructor(
-    public action: FileExplorerService,
-    public backend: BackendConnectorService
+    private action: FileExplorerService,
+    private backend: BackendConnectorService
   ) { }
 
   ngOnInit(): void {
@@ -42,7 +42,11 @@ export class FileExplorerToolsComponent implements OnInit {
   }
 
   _requestSelectedGeoJson() {
+    console.log(this.pathCtrl.value);
     this.action.requestSelectedGeoJson(this.pathCtrl.value);
   }
+
+  _checkIfSocketReady(): boolean { return this.backend.isSocketReady; }
+  _getPathCandidates(): string[] { return this.action.pathCandidateList; }
 
 }

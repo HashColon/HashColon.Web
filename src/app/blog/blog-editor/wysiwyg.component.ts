@@ -40,7 +40,7 @@ export class WysiwygComponent implements OnInit {
   constructor(
     private crud: BlogCrudAuthService,
     private renderer: Renderer2,
-    public layout: LayoutService
+    private layout: LayoutService
   ) {
     this.codemirror = new CodemirrorEditorComponent(renderer);
 
@@ -52,6 +52,8 @@ export class WysiwygComponent implements OnInit {
   ngOnInit(): void {
     //this.blogNavSource.GetInitialList();
   }
+
+  _getLayoutMode(): string { return this.layout.layoutMode; }
 
   _editTitle() {
     this.metaPage.title = this.titleCtrl.value;

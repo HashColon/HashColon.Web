@@ -21,8 +21,8 @@ export class AppComponent {
 
   constructor(
     private router: Router,
-    public auth: AuthService,
-    public backend: BackendConnectorService
+    private auth: AuthService,
+    private backend: BackendConnectorService
   ) { }
 
   ngOnInit() {
@@ -49,6 +49,10 @@ export class AppComponent {
     }
 
   };
+
+  _isAdminAuth(): boolean { return this.auth.IsAdminAuth(); }
+  _checkIfSocketReady(): boolean { return this.backend.isSocketReady; }
+  _goGithub() { window.open("https://github.com/HashColon/HashColon.Web", "_blank"); }
 
   _test() {
     //console.log(this.auth.currentUser);

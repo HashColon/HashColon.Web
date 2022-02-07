@@ -21,7 +21,7 @@ export class BlogPageComponent implements OnChanges {
 
   constructor(
     private storage: Storage,
-    public sanitizer: DomSanitizer,
+    private sanitizer: DomSanitizer,
     private crud?: BlogCrudOpenService
   ) {
     this.metaPage = new MetaPage();

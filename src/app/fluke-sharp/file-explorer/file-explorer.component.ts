@@ -10,20 +10,36 @@ import { BackendConnectorService } from '@HashColon/shared/backend-connector/bac
 })
 export class FileExplorerComponent implements OnInit {
   @ViewChild('geojsonList') geojsonList!: MatSelectionList;
+  selectedFiles: string[];
 
   constructor(
-    public action: FileExplorerService,
-    public backend: BackendConnectorService
-  ) { }
+    private action: FileExplorerService,
+    private backend: BackendConnectorService
+  ) {
+    this.selectedFiles = action.selectedFiles;
+  }
 
   ngOnInit(): void {
     this.action.pushedAction.subscribe((actionName: string) => {
       if (actionName == 'SelectAll') {
         this.geojsonList.selectAll();
+        this._updateSelectionChange();
       }
       else if (actionName == 'DeselectAll') {
         this.geojsonList.deselectAll();
+        this._updateSelectionChange();
       }
     });
+  }
+
+  _checkIfSocketReady(): boolean { return this.backend.isSocketReady; }
+  _getGeojsonFiles(): string[] { return this.action.geojsonFiles; }
+  _updateSelectionChange() {
+    // clear selected files
+    this.action.selectedFiles = [];
+    for (var val of this.geojsonList.selectedOptions.selected) {
+      this.action.selectedFiles.push(val.value);
+    }
+    console.log(this.action.selectedFiles);
   }
 }

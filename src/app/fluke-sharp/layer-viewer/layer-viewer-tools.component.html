@@ -3,31 +3,31 @@
 </button>
 <mat-menu #layerTypeMenu="matMenu">
     <button mat-menu-item *ngFor='let type of layerTypes | keyvalue'
-        (click)='action.AddNewLayer(type.key)'>{{type.key}}</button>
+        (click)='_addNewLayer(type.key)'>{{type.key}}</button>
 </mat-menu>
 
 <button mat-icon-button matTooltip='Upload a new GeoJson file' (click)='fileInput.click()'>
     <mat-icon>upload</mat-icon>
 </button>
-<button mat-icon-button matTooltip='Clear All layers' (click)='action.ClearAllLayers()'>
+<button mat-icon-button matTooltip='Clear All layers' (click)='_clearAllLayers()'>
     <mat-icon>delete_forever</mat-icon>
 </button>
-<button mat-icon-button matTooltip='Show all layers' (click)='action.ShowAllLayers()'>
+<button mat-icon-button matTooltip='Show all layers' (click)='_showAllLayers()'>
     <mat-icon>visibility</mat-icon>
 </button>
-<button mat-icon-button matTooltip='Hide All layers' (click)='action.HideAllLayers()'>
+<button mat-icon-button matTooltip='Hide All layers' (click)='_hideAllLayers()'>
     <mat-icon>visibility_off</mat-icon>
 </button>
 
-<button mat-icon-button matTooltip='Expand All' (click)="action.PushAction('ExpandAll')">
+<button mat-icon-button matTooltip='Expand All' (click)="_expandAllLayers()">
     <mat-icon>unfold_more</mat-icon>
 </button>
-<button mat-icon-button matTooltip='Collapse All' (click)="action.PushAction('CollapseAll')">
+<button mat-icon-button matTooltip='Collapse All' (click)="_collapseAllLayers()">
     <mat-icon>unfold_less</mat-icon>
 </button>
-<button mat-icon-button matTooltip="{{layerManager.autoStyle?'GeoJson color: Auto':'GeoJson color: Manual'}}"
-    (click)='action.ToggleLayerStyles()'>
-    <mat-icon>{{layerManager.autoStyle?'invert_colors':'invert_colors_off'}}</mat-icon>
+<button mat-icon-button matTooltip="{{_checkAutoStyle()?'GeoJson color: Auto':'GeoJson color: Manual'}}"
+    (click)='_toggleLayerStyles()'>
+    <mat-icon>{{_checkAutoStyle()?'invert_colors':'invert_colors_off'}}</mat-icon>
 </button>
 
 <span class="spacer"></span>

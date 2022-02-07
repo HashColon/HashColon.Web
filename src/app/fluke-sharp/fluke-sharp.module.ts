@@ -44,6 +44,7 @@ import { MapViewerToolsComponent } from '@FlukeSharp/map-viewer/map-viewer-tools
 // file explorer
 import { FileExplorerComponent } from '@FlukeSharp/file-explorer/file-explorer.component';
 import { FileExplorerToolsComponent } from '@FlukeSharp/file-explorer/file-explorer-tools.component';
+import { LayerStyleEditorComponent } from '@FlukeSharp/layer-viewer/layer-style-editor.component';
 
 
 
@@ -53,7 +54,7 @@ import { FileExplorerToolsComponent } from '@FlukeSharp/file-explorer/file-explo
     LayerViewerComponent,
     LayerEditorComponent, LayerEditorGeojsonComponent, LayerEditorMarkerComponent, LayerViewerToolsComponent,
     MapViewerComponent, MapViewerToolsComponent,
-    FileExplorerComponent, FileExplorerToolsComponent
+    FileExplorerComponent, FileExplorerToolsComponent, LayerStyleEditorComponent
   ],
   imports: [
     CommonModule,

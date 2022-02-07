@@ -13,7 +13,7 @@ export class BlogViewerComponent implements OnInit, AfterViewChecked {
 
   constructor(
     private route: ActivatedRoute,
-    public layout: LayoutService,
+    private layout: LayoutService,
     private changeDetector: ChangeDetectorRef
   ) { }
 
@@ -37,4 +37,6 @@ export class BlogViewerComponent implements OnInit, AfterViewChecked {
   _changePageKey(newKey: string) {
     this.pageKey = newKey;
   }
+
+  _getLayoutMode(): string { return this.layout.layoutMode; }
 }

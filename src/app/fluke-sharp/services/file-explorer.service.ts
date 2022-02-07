@@ -1,7 +1,5 @@
 import { Injectable } from '@angular/core';
-import { FormControl } from '@angular/forms';
 import { Subject } from 'rxjs';
-import { GeoJSON } from 'leaflet';
 import { BackendConnectorService } from '@HashColon/shared/backend-connector/backend-connector.service';
 import { HashColonMessage, HashColonMessageType } from '@HashColon/shared/backend-connector/hashcolon-message';
 import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
@@ -47,6 +45,7 @@ export class FileExplorerService {
 
   requestSelectedGeoJson(path: string) {
     var reqfilelist: string[] = [];
+    console.log(this.selectedFiles);
     for (var afile of this.selectedFiles) {
       try {
         var refinedPath: string = path.endsWith('/')
@@ -134,8 +133,8 @@ export class FileExplorerService {
   }
 
   constructor(
-    public backend: BackendConnectorService,
-    public layers: LayerManagerService
+    private backend: BackendConnectorService,
+    private layers: LayerManagerService
   ) {
     this.backend.socketReadyEvent.prependOnceListener("socketready", () => {
       this._onSocketReady();

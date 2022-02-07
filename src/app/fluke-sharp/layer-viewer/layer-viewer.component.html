@@ -1,5 +1,5 @@
 <mat-accordion multi #layerViewer="matAccordion">
-    <fluke-layer-editor *ngFor='let layer of manager.labeled | keyvalue' [label]='layer.key' [layer]='layer.value'
-        [type]='action.GetLayerType(layer.value)'>
+    <fluke-layer-editor *ngFor='let layer of _getAllLayers() | keyvalue' [label]='layer.key' [layer]='layer.value'
+        [type]='_getLayerType(layer.value)'>
     </fluke-layer-editor>
 </mat-accordion>

@@ -58,6 +58,9 @@ export class MapViewerService {
     this.currentMapTile.bringToBack();
   }
 
+  SetView(latlng: LatLng, zoom?: number) { this.map.setView(latlng, zoom); }
+  SetZoom(zoom: number) { this.map.setZoom(zoom) }
+
   constructor(
     private layers: LayerManagerService
   ) {

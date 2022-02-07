@@ -21,7 +21,7 @@ export class LayerEditorComponent implements OnInit {
   //isExpanded: boolean = false;
 
   constructor(
-    public manager: LayerManagerService,
+    private manager: LayerManagerService,
     private action: LayerViewerService) { }
 
   ngOnInit(): void {
@@ -47,6 +47,10 @@ export class LayerEditorComponent implements OnInit {
     // disable accordian while clicking the button
     this.isDisabled = true;
     return this.manager.removeLayer(this.label);
+  }
+
+  _isVisible(name: string): boolean {
+    return this.manager.isVisible(name);
   }
 
   _openedLayer() { this.isOpened = true; this.action.isLoading = false; }

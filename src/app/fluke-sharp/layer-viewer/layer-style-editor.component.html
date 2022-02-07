@@ -1,0 +1,24 @@
+<div *ngIf="!_hasCustomStyle()">
+    <button class='EmptyStylebox' mat-stroked-button color='accent' (click)='_addCustomStyle()'>
+        <mat-icon>add</mat-icon>
+        <mat-icon>palette</mat-icon>
+    </button>
+</div>
+
+<div *ngIf="_hasCustomStyle()">
+    <mat-form-field appearance='outline' hideRequiredMarker>
+        <mat-label>
+            Layer Style
+            <mat-icon [color]="_isFormError()?'warn':'primary'">palette</mat-icon>
+        </mat-label>
+        <textarea matInput [formControl]='formControl' [errorStateMatcher]='errorChecker' (input)='_editStyleSynced()'
+            cdkTextareaAutosize #autosize="cdkTextareaAutosize" cdkAutosizeMinRows="3" cdkAutosizeMaxRows="50">
+        </textarea>
+        <mat-error *ngIf="formControl.hasError('jsonInvalid')">
+            Invalid JSON syntax
+        </mat-error>
+        <button mat-icon-button matSuffix (click)='_removeCustomStyle()'>
+            <mat-icon>close</mat-icon>
+        </button>
+    </mat-form-field>
+</div>

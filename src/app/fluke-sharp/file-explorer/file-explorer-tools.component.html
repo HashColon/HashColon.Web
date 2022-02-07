@@ -1,13 +1,13 @@
-<span *ngIf="!backend.isSocketReady"><i>Backend server not ready. Connect backend server.</i></span>
+<span *ngIf="!_checkIfSocketReady()"><i>Backend server not ready. Connect backend server.</i></span>
 
-<ng-container *ngIf="backend.isSocketReady">
+<ng-container *ngIf="_checkIfSocketReady()">
 
     <mat-form-field class="path-input">
         <mat-label>Current directory</mat-label>
         <input matInput type="text" placeholder="~" aria-label="Current directory" [formControl]="pathCtrl"
             [matAutocomplete]="pathAutoComplete" (input)='_editPathSynced()'>
         <mat-autocomplete #pathAutoComplete="matAutocomplete" (optionSelected)="_editPathSynced()">
-            <mat-option *ngFor="let path of action.pathCandidateList" [value]="path" class="path-candidate">
+            <mat-option *ngFor="let path of _getPathCandidates()" [value]="path" class="path-candidate">
                 {{path}}
             </mat-option>
         </mat-autocomplete>

@@ -1,19 +1,22 @@
 <div class="backendConnectorWrapper">
     <mat-form-field class="backendHostInput" (click)="$event.stopPropagation();">
         <mat-label>Backend Host:Port</mat-label>
-        <input matInput (change)='connectBackend(wsControl.value)' (click)="$event.stopPropagation();"
+        <input matInput (change)='_connectBackend(wsControl.value)' (click)="$event.stopPropagation();"
             [formControl]="wsControl">
         <button mat-icon-button matSuffix color='primary' matTooltip="Connect!"
-            (click)='$event.stopPropagation();connectBackend(wsControl.value)'>
+            (click)='$event.stopPropagation();_connectBackend(wsControl.value)'>
             <mat-icon>check</mat-icon>
         </button>
-        <button mat-icon-button matSuffix [color]="backend.isSocketReady?'disabled':'warn'"
+        <button mat-icon-button matSuffix [color]="_checkIfSocketReady()?'disabled':'warn'"
             matTooltip="Troubleshoot ssl certification problem"
-            (click)='$event.stopPropagation(); !backend.isSocketReady?troubleshootWSS():"";'>
-            <mat-icon>{{backend.isSocketReady?'gpp_good':'gpp_bad'}}</mat-icon>
+            (click)='$event.stopPropagation(); !_checkIfSocketReady()?_troubleshootWSS():"";'>
+            <mat-icon>{{_checkIfSocketReady()?'gpp_good':'gpp_bad'}}</mat-icon>
+        </button>
+        <button mat-icon-button matSuffix [color]="'warn'" matTooltip="Disconnect"
+            (click)='$event.stopPropagation(); _disconnect();'>
+            <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>
-
 
     <!-- <button mat-icon-button color='primary' matTooltip="Connect!"
         (click)='$event.stopPropagation();connectBackend(wsControl.value)'>

@@ -1,12 +1,11 @@
 import { CdkDragMove } from '@angular/cdk/drag-drop';
 import { Component, ViewChild, ElementRef, AfterViewInit, NgZone } from '@angular/core';
-import { Map, LeafletMouseEvent, TileLayer } from 'leaflet';
 
-import { TileLayerSrcs } from '@FlukeSharp/services/leaflet-custom-settings';
 import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
 import { LayerViewerService } from '@FlukeSharp/services/layer-viewer.service';
 import { MapViewerService } from '@FlukeSharp/services/map-viewer.service';
 import { FileExplorerService } from '@FlukeSharp/services/file-explorer.service';
+import { Layer, LeafletMouseEvent, Map } from 'leaflet';
 
 
 @Component({
@@ -18,8 +17,8 @@ export class FlukeUIComponent implements AfterViewInit {
   // drag-resizable editor window
   @ViewChild('dragHandle') dragHandle: ElementRef = {} as ElementRef;
   dragHandleElement: HTMLElement;
-  showDragHandle = false;
-  editorOpened = false
+  showDragHandle = true;
+  editorOpened = true;
   editorWindowWidth = "300px";
 
   _dragToResizeEditor(e: CdkDragMove) {
@@ -67,9 +66,9 @@ export class FlukeUIComponent implements AfterViewInit {
   // constructor, ng-lifecycle hooks
   constructor(
     private ngZone: NgZone,
-    public mapFunc: MapViewerService,
-    public layers: LayerManagerService,
-    public layersFunc: LayerViewerService,
+    private mapFunc: MapViewerService,
+    private layers: LayerManagerService,
+    private layersFunc: LayerViewerService,
     private fileExplorerFunc: FileExplorerService
   ) {
     this.dragHandleElement = this.dragHandle.nativeElement;
@@ -77,8 +76,13 @@ export class FlukeUIComponent implements AfterViewInit {
 
   ngAfterViewInit(): void {
     this.dragHandleElement = this.dragHandle.nativeElement;
-
   }
+
+  _getLeafletInitialOption() { return this.mapFunc.GetInitialOption(); }
+  _onMapReady(map: Map) { this.mapFunc.OnMapReady(map); }
+  _onMapClick(event: LeafletMouseEvent) { this.mapFunc.OnMapClick(event); }
+
+  _getVisibleLayers(): Layer[] { return this.layers.visible; }
 
 
 

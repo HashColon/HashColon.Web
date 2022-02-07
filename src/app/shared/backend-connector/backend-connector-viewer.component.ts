@@ -11,22 +11,18 @@ export class BackendConnectorViewerComponent implements OnInit {
 
   wsControl = new FormControl();
 
-  constructor(public backend: BackendConnectorService) {
+  constructor(private backend: BackendConnectorService) {
     this.backend.socketReadyEvent.prependOnceListener("socketready",
       () => {
         this.wsControl.setValue(this.backend.address);
       });
   }
 
-  ngOnInit(): void {
-  }
+  ngOnInit(): void { }
 
-  connectBackend(address: string) {
-    this.backend.connectBackend(address);
-  }
-
-  troubleshootWSS() {
-    window.open("https://" + this.backend.address);
-  }
+  _connectBackend(address: string) { this.backend.connectBackend(address); }
+  _checkIfSocketReady(): boolean { return this.backend.isSocketReady; }
+  _troubleshootWSS() { window.open("https://" + this.backend.address); }
+  _disconnect() { this.backend.disconnect(); }
 
 }

@@ -1,4 +1,5 @@
-import { AbstractControl, ValidationErrors } from '@angular/forms';
+import { AbstractControl, FormControl, FormGroupDirective, NgForm, ValidationErrors } from '@angular/forms';
+import { ErrorStateMatcher } from '@angular/material/core';
 //import { valid as isGeoJsonValid } from 'geojson-validation';
 const isGeoJsonValid = require('geojson-validation').valid;
 
@@ -22,6 +23,16 @@ export function GeoJsonValidator(control: AbstractControl): ValidationErrors | n
     return null;
 };
 
+export function JsonValidator(control: AbstractControl): ValidationErrors | null {
+    try {
+        JSON.parse(control.value);
+    } catch (e) {
+        //        console.log('JI!: ' + control.value);
+        return { jsonInvalid: true };
+    }
+    return null;
+}
+
 export function LatValidator(control: AbstractControl): ValidationErrors | null {
 
     if (isNumber(control.value)) {
@@ -41,5 +52,19 @@ export function LngValidator(control: AbstractControl): ValidationErrors | null 
         } else return null;
     } else {
         return { notNumber: true };
+    }
+}
+
+export class JsonErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+        const isSubmitted = form && form.submitted;
+        return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+    }
+}
+
+export class GeoJsonErrorStateMatcher implements ErrorStateMatcher {
+    isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+        const isSubmitted = form && form.submitted;
+        return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
     }
 }

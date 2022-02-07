@@ -37,6 +37,13 @@ export class BackendConnectorService {
     }
   }
 
+  disconnect() {
+    this.ws?.close();
+    this.ws = null;
+    this.isSocketReady = false;
+    this.address = '';
+  }
+
   generateKey(): string {
     var genkey: string;
     do {
