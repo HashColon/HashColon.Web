@@ -1,5 +1,6 @@
 # HashColon.Web
 
+__VISIT:__ https://hashcolon-wchyoo.web.app/ 
 This project consists of two distinct subprojects: 
 * FlukeSharp: Web viewer for nautical routes and other maritime information based on geojson data
 * Blog: My blog with self-built blog engine based on Firebase services
