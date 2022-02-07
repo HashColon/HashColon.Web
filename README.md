@@ -12,19 +12,19 @@ This project consists of two distinct subprojects:
     * Custom layer styling: Can add user-defined styles to layers. Custom styling ignores auto-coloring.
         * Refer to __Path options__ at https://leafletjs.com/reference.html#path 
         * Styling example:
-        '''json
+        
         {
             "color": "#663399", 
             "weight": 3
         }
-        '''
+        
     * __Go to__ function implemented
         * Map => (bottom tool bar) Go to
         * Give latitude and longitude to move the center of the view. __Latitude should come first!__ All examples below are available.
-            `38, 127
-            `[38, 127]
-            `{38, 127}
-            `(38, 127)
+            `38, 127`
+            `[38, 127]`
+            `{38, 127}`
+            `(38, 127)`
         * Map scaling can be done with the keyword "zoom:". Larger the number, more the map is zoomed.            
             'zoom: 3'
         * Move & zoom can be done at once.
