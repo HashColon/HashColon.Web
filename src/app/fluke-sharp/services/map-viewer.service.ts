@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Map, TileLayer, Marker, LatLng, LeafletMouseEvent } from 'leaflet';
+import { Map, TileLayer, Marker, LatLng, LeafletMouseEvent, Icon } from 'leaflet';
 import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
 import * as Settings from '@FlukeSharp/services/leaflet-custom-settings';
 
@@ -18,6 +18,13 @@ export class MapViewerService {
 
   OnMapReady(map: Map) {
     this.map = map;
+
+    // set default icon
+    Icon.Default.prototype.options.iconSize = Settings.markerIcon.options.iconSize;
+    Icon.Default.prototype.options.iconAnchor = Settings.markerIcon.options.iconAnchor;
+    Icon.Default.prototype.options.iconUrl = Settings.markerIcon.options.iconUrl;
+    Icon.Default.prototype.options.shadowSize = Settings.markerIcon.options.shadowSize;
+    Icon.Default.prototype.options.shadowUrl = Settings.markerIcon.options.shadowUrl;
   }
 
   OnMapClick(e: LeafletMouseEvent) {

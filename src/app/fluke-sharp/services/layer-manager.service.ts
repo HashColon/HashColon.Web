@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Layer, LayerGroup, GeoJSON, Marker } from 'leaflet';
+import { Layer, LayerGroup, GeoJSON, Marker, Path, FeatureGroup } from 'leaflet';
 import * as leafletSettings from '@FlukeSharp/services/leaflet-custom-settings';
 
 export var LayerTypes: { [key: string]: any } = {
@@ -22,7 +22,7 @@ export class LayerManagerService {
 
   stylefunc_Auto(val: number) {
     if (val < 0.0 || val > 1.0) {
-      throw "layer-manager.service::stylefunc_autoSpectrum : given val is not in range [0,1]";
+      throw "layer-manager.service::stylefunc_Auto : given val is not in range [0,1]";
     }
     else {
       return () => {
@@ -85,13 +85,15 @@ export class LayerManagerService {
 
   // rename a layer
   renameLayer(label: string, newlabel: string): boolean {
+    // if the name 'newlabel' is already occupied, return false
     if (this.hasLabel(newlabel)) {
       return false;
     }
-
+    // move layer from label to newlabel
     this.labeled[newlabel] = this.labeled[label];
     delete this.labeled[label];
 
+    // if user-style is defined, move it also.
     if (this.hasUserStyle(label)) {
       this.userstyles[newlabel] = this.userstyles[label];
       delete this.userstyles[label];
@@ -135,17 +137,20 @@ export class LayerManagerService {
     options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false },
     userstyle?: any): boolean {
 
+    // trim label
     var newlabel: string = label === null ? '' : label.trim();
 
+    // if the newlabel is a duplicate or newlabel is empty string,    
     if (this.hasLabel(newlabel) ||
       (!(label && label.trim().length))) {
+      // if forced option is on, make a random name
       if (options.forced) {
-        newlabel = newlabel + ((newlabel.length) ? '_' : '') + this.generateRandomName();
-
-        while (this.hasLabel(newlabel)) {
-          newlabel = label + '_' + this.generateRandomName();
-        }
+        var temp_newlabel;
+        do {
+          temp_newlabel = newlabel + ((newlabel.length) ? '_' : '') + this.generateRandomName();
+        } while (this.hasLabel(temp_newlabel));
       }
+      // else do not insert and return.
       else {
         return false;
       }
@@ -165,7 +170,10 @@ export class LayerManagerService {
     }
 
     // if autoStyle is on, apply it.
-    if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
+    if (this.autoStyle)
+      this.setAllGeoJsonStyles_Auto();
+    else
+      this.setAllGeoJsonStyles_Manual();
 
     return true;
   }
@@ -174,12 +182,20 @@ export class LayerManagerService {
     options: { hide?: boolean; forced?: boolean } = { hide: false, forced: false },
     userstyle?: any): boolean {
     // create a empty geojson layer 
-
     // return this.pushLayer(newlayer, label, options);
     return this.pushLayer(
-      new GeoJSON(geoJsonObj, { style: this.stylefunc_Manual }),
+      new GeoJSON(geoJsonObj,
+        {
+          // style: this.stylefunc_Manual,
+          onEachFeature: (feature: any, layer) => {
+            if (feature.properties.style) {
+              if (layer instanceof Path || layer instanceof FeatureGroup || layer instanceof GeoJSON) {
+                layer.setStyle(feature.properties.style);
+              }
+            }
+          }
+        }),
       label, options, userstyle);
-
   }
 
   pushUserStyle(userstyle: any, label: string) {
@@ -187,7 +203,7 @@ export class LayerManagerService {
       this.userstyles[label] = userstyle;
       if (this.labeled[label] instanceof GeoJSON) {
         // first reset to initial state
-        (this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Manual);
+        //(this.labeled[label] as GeoJSON).setStyle(this.stylefunc_Manual);
         // then change to user styles
         (this.labeled[label] as GeoJSON).setStyle(() => this.userstyles[label]);
       }
@@ -222,29 +238,17 @@ export class LayerManagerService {
     }
     else {
 
-      // if the layer is visible, make it invisible
-      var checktoggle: boolean;
-      if (this.isVisible(label)) {
-        this.toggleLayer(label);
-        checktoggle = true;
-      }
-      else {
-        checktoggle = false;
-      }
-
       // if the layer is type of layer group, edit the layer inside the group
       if (this.labeled[label] instanceof LayerGroup) {
         (this.labeled[label] as LayerGroup).clearLayers();
         (this.labeled[label] as LayerGroup).addLayer(layer);
       }
 
-      // if the layer was visible, turn it back on.
-      if (checktoggle) {
-        this.toggleLayer(label);
-      }
-
       // if autoStyle is on, apply it.
-      if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
+      if (this.autoStyle)
+        this.setAllGeoJsonStyles_Auto();
+      else
+        this.setAllGeoJsonStyles_Manual();
 
       return true;
     }
@@ -257,28 +261,14 @@ export class LayerManagerService {
     }
     else if (this.labeled[label] instanceof GeoJSON) {
 
-      // if the layer is visible, make it invisible
-      var checktoggle: boolean;
-      if (this.isVisible(label)) {
-        this.toggleLayer(label);
-        checktoggle = true;
-      }
-      else {
-        checktoggle = false;
-      }
-
-
       (this.labeled[label] as GeoJSON).clearLayers();
       (this.labeled[label] as GeoJSON).addData(geoJsonObj);
 
-
-      // if the layer was visible, turn it back on.
-      if (checktoggle) {
-        this.toggleLayer(label);
-      }
-
       // if autoStyle is on, apply it.
-      if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
+      if (this.autoStyle)
+        this.setAllGeoJsonStyles_Auto();
+      else
+        this.setAllGeoJsonStyles_Manual();
 
       return true;
     }
@@ -299,7 +289,7 @@ export class LayerManagerService {
         delete this.userstyles[label];
       }
 
-      // if autoStyle is on, apply it.
+      // if autoStyle is on, recompute colors and apply them.
       if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
       return true;
     }
@@ -319,7 +309,7 @@ export class LayerManagerService {
       }
       re = true;
     }
-    // if autoStyle is on, apply it.
+    // if autoStyle is on, recompute colors and apply them.
     if (this.autoStyle) this.setAllGeoJsonStyles_Auto();
     return re;
   }
