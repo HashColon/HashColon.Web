@@ -10,6 +10,32 @@ This project consists of two distinct subprojects:
 
 ### Releases
 
+* Apr.30, 2022
+    * GeoJSON styling approved: Now, styles are applied by each GeoJSON "feature".
+        * Styles can be now implemented inside GeoJSON.
+        * Refer to __Path options__ at https://leafletjs.com/reference.html#path 
+        * In-code styling example:
+        ```json
+        {
+            "type": "FeatureCollection",
+            "features": [
+                {
+                    "type": "Feature",
+                    "properties": {
+                        "style": {"color": "#FFFFFF"}
+                    },
+                    "geometry": {
+                        "type": "MultiPolygon",
+                        "coordinates": [ 
+                            /* .... */
+                        ]
+                    }
+                }
+            ]
+        }
+        ```
+        * Minor changes in layer managing codes.        
+
 * Feb.07, 2022
     * Custom layer styling: Can add user-defined styles to layers. Custom styling ignores auto-coloring.
         * Refer to __Path options__ at https://leafletjs.com/reference.html#path 
