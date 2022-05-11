@@ -40,6 +40,6 @@ export class FileExplorerComponent implements OnInit {
     for (var val of this.geojsonList.selectedOptions.selected) {
       this.action.selectedFiles.push(val.value);
     }
-    console.log(this.action.selectedFiles);
+    //console.log(this.action.selectedFiles);
   }
 }
