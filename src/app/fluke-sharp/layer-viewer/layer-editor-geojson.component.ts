@@ -2,7 +2,7 @@ import { Component, Input, OnInit } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, Validators } from '@angular/forms';
 import { GeoJSON, Layer } from 'leaflet';
-import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
+import { LayerManagerService, LayerItem } from '@FlukeSharp/services/layer-manager.service';
 import { GeoJsonErrorStateMatcher, GeoJsonValidator } from '@FlukeSharp/services/geojson-validator';
 
 @Component({
@@ -13,8 +13,7 @@ import { GeoJsonErrorStateMatcher, GeoJsonValidator } from '@FlukeSharp/services
 export class LayerEditorGeojsonComponent implements OnInit {
 
   static readonly type: string = "GeoJSON";
-  @Input() label: string = '';
-  @Input() layer: Layer = new Layer();
+  @Input() item: LayerItem = { layer: new GeoJSON() as Layer, label: '' };
 
   formControl: FormControl = new FormControl();
   errorChecker: ErrorStateMatcher = new ErrorStateMatcher();
@@ -30,11 +29,12 @@ export class LayerEditorGeojsonComponent implements OnInit {
 
   _editLayer(): boolean {
     try {
-      this.manager.editGeoJsonLayer(
-        JSON.parse(this.formControl.value),
-        this.label);
+      this.manager.EditGeoJsonLayer(
+        this.manager.GetIdx(this.item),
+        JSON.parse(this.formControl.value)
+      );
     } catch (e) {
-      //console.log('_editLayer: ' + this.formControl.value);
+      console.error('failed to edit this layer');
       return false;
     }
     return true;
@@ -50,13 +50,12 @@ export class LayerEditorGeojsonComponent implements OnInit {
 
   ngOnInit(): void {
     // if layer is not given
-    if (!this.layer) {
-      this.layer = new GeoJSON() as Layer;
+    if (!this.item) {
+      this.item = { layer: new GeoJSON() as Layer, label: '' };
     }
     this.formControl = new FormControl(
-      JSON.stringify((this.layer as GeoJSON).toGeoJSON(), null, 2),
+      JSON.stringify((this.item.layer as GeoJSON).toGeoJSON(), null, 2),
       [Validators.required, GeoJsonValidator]);
     this.errorChecker = new GeoJsonErrorStateMatcher();
-
   }
 }

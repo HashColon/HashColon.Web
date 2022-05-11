@@ -10,7 +10,7 @@
                 </button>
                 <span matSuffix>deg</span>
                 <mat-error *ngIf="latFormControl.hasError('latInvalid') && !latFormControl.hasError('required')">
-                    Latitude must be in between [-180,180]
+                    Latitude must be in between [-90,90]
                 </mat-error>
                 <mat-error *ngIf="latFormControl.hasError('notNumber') && !latFormControl.hasError('required')">
                     Latitude must be a number
@@ -35,7 +35,7 @@
                 </button>
                 <span matSuffix>deg</span>
                 <mat-error *ngIf="lngFormControl.hasError('latInvalid') && !lngFormControl.hasError('required')">
-                    Longitude must be in between [-90,90]
+                    Longitude must be in between [-180,180]
                 </mat-error>
                 <mat-error *ngIf="lngFormControl.hasError('notNumber') && !lngFormControl.hasError('required')">
                     Longitude must be a number

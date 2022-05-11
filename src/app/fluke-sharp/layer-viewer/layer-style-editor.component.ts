@@ -1,8 +1,9 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { FormControl } from '@angular/forms';
 import { ErrorStateMatcher } from '@angular/material/core';
+import { Layer } from 'leaflet';
 import { GeoJsonErrorStateMatcher, JsonValidator } from '@FlukeSharp/services/geojson-validator';
-import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
+import { LayerManagerService, LayerItem } from '@FlukeSharp/services/layer-manager.service';
 import { LayerViewerService } from '@FlukeSharp/services/layer-viewer.service';
 
 @Component({
@@ -12,7 +13,10 @@ import { LayerViewerService } from '@FlukeSharp/services/layer-viewer.service';
 })
 export class LayerStyleEditorComponent implements OnInit {
 
-  @Input() label: string = '';
+  @Input() item: LayerItem = {
+    layer: new Layer(),
+    label: ''
+  };
 
   formControl: FormControl = new FormControl();
   errorChecker: ErrorStateMatcher = new ErrorStateMatcher();
@@ -26,9 +30,10 @@ export class LayerStyleEditorComponent implements OnInit {
     this.errorChecker = new GeoJsonErrorStateMatcher();
   }
 
-  _hasCustomStyle(): boolean { return this.manager.hasUserStyle(this.label); }
+  _idx(): number { return this.manager.GetIdx(this.item); }
+  _hasCustomStyle(): boolean { return (!!this.item.userStyles); }
   _addCustomStyle() { this._editStyle(); }
-  _removeCustomStyle() { this.manager.removeUserStyle(this.label); }
+  _removeCustomStyle() { this.manager.RemoveUserStyles(this._idx()); }
 
   _isFormError(): boolean {
     if (this.formControl.hasError('jsonInvalid')) return true;
@@ -37,7 +42,10 @@ export class LayerStyleEditorComponent implements OnInit {
 
   _editStyle(): boolean {
     try {
-      this.manager.editUserStyle(JSON.parse(this.formControl.value), this.label);
+      this.manager.EditUserStyles(
+        this._idx(),
+        JSON.parse(this.formControl.value)
+      );
     } catch (e) {
       return false;
     }

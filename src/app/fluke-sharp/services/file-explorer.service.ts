@@ -83,7 +83,7 @@ export class FileExplorerService {
     for (var item of geojsons) {
       try {
         var geojson = JSON.parse(item.geojson);
-        this.layers.pushGeoJsonLayer(geojson, item.filename);
+        this.layers.AddGeoJsonLayer(geojson, item.filename);
       } catch (e) { console.error(e); }
     }
     delete this.msgKeyList[msg.messageKey];

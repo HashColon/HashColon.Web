@@ -10,6 +10,15 @@ This project consists of two distinct subprojects:
 
 ### Releases
 
+* May.11, 2022
+    * Bug fix: 
+        * Bugs in editing markers, GeoJSON is now fixed. 
+        * LayerManager is now rewritten to get rid of those spaghetti.  
+        __SPAGHETTI GO TO HELL!!__ 
+        * Layer indexing logic is changed. Layers are not indexed by their labels anymore. So, now layers can have duplicate labels.
+        * And... some other minor bugs are fixed.
+        * Longitude/latitude range in marker editor UI is fixed.
+
 * Apr.30, 2022
     * GeoJSON styling approved: Now, styles are applied by each GeoJSON "feature".
         * Styles can be now implemented inside GeoJSON.

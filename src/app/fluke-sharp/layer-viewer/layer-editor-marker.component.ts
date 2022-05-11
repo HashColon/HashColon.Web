@@ -2,9 +2,9 @@ import { Component, OnInit, Input } from '@angular/core';
 import { ErrorStateMatcher } from '@angular/material/core';
 import { FormControl, FormGroupDirective, NgForm, Validators } from '@angular/forms';
 
-import { Marker, Layer } from 'leaflet';
+import { Marker, Layer, LatLng } from 'leaflet';
 
-import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
+import { LayerManagerService, LayerItem } from '@FlukeSharp/services/layer-manager.service';
 import { LatValidator, LngValidator } from '@FlukeSharp/services/geojson-validator';
 
 export class LatErrorStateMatcher implements ErrorStateMatcher {
@@ -29,8 +29,10 @@ export class LngErrorStateMatcher implements ErrorStateMatcher {
 export class LayerEditorMarkerComponent implements OnInit {
 
   static readonly type: string = "Marker";
-  @Input() label: string = '';
-  @Input() layer: Layer = new Layer();
+  @Input() item: LayerItem = {
+    layer: new Marker([0, 0]) as Layer,
+    label: ''
+  };
 
   latFormControl: FormControl = new FormControl();
   lngFormControl: FormControl = new FormControl();
@@ -52,12 +54,10 @@ export class LayerEditorMarkerComponent implements OnInit {
   }
 
   _editLayer(): boolean {
-    if (this.label) {
-      (this.manager.labeled[this.label] as Marker).setLatLng(
-        { lat: this.latFormControl.value, lng: this.lngFormControl.value }
-      );
-      return true;
-    } else return false;
+    return this.manager.EditMarkerLayer(
+      this.manager.GetIdx(this.item),
+      { lat: this.latFormControl.value, lng: this.lngFormControl.value }
+    );
   }
 
   _editLayerSynced(): void {
@@ -71,17 +71,20 @@ export class LayerEditorMarkerComponent implements OnInit {
   ngOnInit(): void {
 
     // if layer is not given
-    if (!this.layer) {
-      this.layer = new Marker([0, 0]) as Layer;
+    if (!this.item) {
+      this.item = {
+        layer: new Marker([0, 0]) as Layer,
+        label: ''
+      };
     }
     // lat form control
     this.latFormControl = new FormControl(
-      (this.layer as Marker).getLatLng().lat,
+      (this.item.layer as Marker).getLatLng().lat,
       [Validators.required, LatValidator]);
     this.latErrorChecker = new LatErrorStateMatcher();
     // lng form control
     this.lngFormControl = new FormControl(
-      (this.layer as Marker).getLatLng().lng,
+      (this.item.layer as Marker).getLatLng().lng,
       [Validators.required, LngValidator]);
     this.lngErrorChecker = new LngErrorStateMatcher();
   }

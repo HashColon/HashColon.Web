@@ -1,8 +1,8 @@
 import { Injectable } from '@angular/core';
-import { Layer, Marker, GeoJSON } from 'leaflet';
+import { Layer, Marker, GeoJSON, LatLng } from 'leaflet';
 import { Subject } from 'rxjs';
 import * as leafletSetting from '@FlukeSharp/services/leaflet-custom-settings';
-import { LayerManagerService, LayerTypes } from '@FlukeSharp/services/layer-manager.service';
+import { LayerManagerService, LayerItem, LayerTypes } from '@FlukeSharp/services/layer-manager.service';
 
 
 
@@ -26,18 +26,19 @@ export class LayerViewerService {
     switch (type) {
       // Special cases which needs inputs for new layer object
       case 'Marker': {
-        newlayer = new Marker([0, 0], { icon: leafletSetting.markerIcon });
+        this.manager.AddMarkerLayer(new LatLng(0.0, 0.0), '');
+        break;
+      }
+      case 'GeoJSON': {
+        this.manager.AddGeoJsonLayer(null, '');
         break;
       }
       // other cases 
       default: {
-        newlayer = new LayerTypes[type]();
+        this.manager.AddLayer(new LayerTypes[type], '');
+        break;
       }
     }
-    this.manager.pushLayer(
-      newlayer, '',
-      { forced: true }
-    );
     this.isLoading = false;
   }
 
@@ -52,11 +53,14 @@ export class LayerViewerService {
 
   AddNewFileLayers(filelist: FileList): boolean {
     this.isLoading = true;
-    let readflags: boolean[] = new Array(filelist.length).fill(false);
+    let readFinishFlags: boolean[] = new Array(filelist.length).fill(false);
+    let readSuccessFlags: boolean[] = new Array(filelist.length).fill(false);
 
     for (let fidx = 0; fidx < filelist.length; fidx++) {
       let fileReader = new FileReader();
 
+      // onload event: fired when file loading finished successfully
+      // Parse GeoJson file & create a GeoJson layer
       fileReader.onload = (event) => {
         let geojson: any;
         // check geojson validity 
@@ -67,40 +71,54 @@ export class LayerViewerService {
           console.error('Invalid JSON file.');
           return false;
         }
-        this.manager.pushGeoJsonLayer(
-          geojson, filelist[fidx].name, { forced: true }
-        );
-
+        this.manager.AddGeoJsonLayer(geojson, filelist[fidx].name);
+        readSuccessFlags[fidx] = true;
+        console.log(filelist[fidx].name + ' loaded as layer to leaflet-map');
         return true;
       }
+
+      // onloadend event: fired when file loading finished successfully or not
+      // check if all file reading is finished. 
+      // if done, change loading status to false
       fileReader.onloadend = (event) => {
-        console.log(filelist[fidx].name + ' loaded as layer to leaflet-map');
-        readflags[fidx] = true;
+        readFinishFlags[fidx] = true;
         let doneAll = true;
         for (let fidx = 0; fidx < filelist.length; fidx++) {
-          doneAll = doneAll && readflags[fidx];
+          doneAll = doneAll && readFinishFlags[fidx]
         }
         this.isLoading = !doneAll;
       }
+
+      // onerror event: failed to read file
+      fileReader.onerror = (event) => {
+        console.error('Failed to read file: ' + filelist[fidx].name);
+      }
+
+      // onabort event: failed to read file
+      fileReader.onabort = (event) => {
+        console.error('Reading file aborted: ' + filelist[fidx].name);
+      }
+
+      // start reading shits!
       fileReader.readAsText(filelist[fidx]);
     }
     return true;
   }
 
   ClearAllLayers() {
-    this.manager.clearAll();
+    this.manager.RemoveAllLayers();
   }
 
   ShowAllLayers() {
-    this.manager.showAll();
+    this.manager.ShowAllLayers();
   }
 
   HideAllLayers() {
-    this.manager.hideAll();
+    this.manager.HideAllLayers();
   }
 
   ToggleLayerStyles() {
-    this.manager.toggleStyle();
+    this.manager.ToggleStyles();
   }
 
   PushAction(actionName: string) {

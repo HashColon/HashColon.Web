@@ -16,6 +16,14 @@ export class MapViewerService {
   picker: LatLng = new LatLng(0, 0);
   isPickPos: boolean = false;
 
+  constructor(
+    private layers: LayerManagerService
+  ) {
+    this.currentMapTile = Settings.options.layers[0];
+    this.overlayTiles = Settings.options.layers.slice(1);
+    this.isNauticalChartVisible = Settings.options.layers.includes(Settings.OpenSeaMap);
+  }
+
   OnMapReady(map: Map) {
     this.map = map;
 
@@ -31,14 +39,11 @@ export class MapViewerService {
     this.picker.lat = e.latlng.lat;
     this.picker.lng = e.latlng.lng;
 
-    if (this.isPickPos) {
-      this.layers.pushLayer(
-        new Marker([e.latlng.lat, e.latlng.lng],
-          {
-            icon: Settings.markerIcon
-          }
-        ), 'Position', { forced: true });
-    }
+    if (this.isPickPos)
+      this.layers.AddMarkerLayer(
+        [e.latlng.lat, e.latlng.lng],
+        "PickedMarker"
+      );
   }
 
   GetInitialOption() {
@@ -68,11 +73,5 @@ export class MapViewerService {
   SetView(latlng: LatLng, zoom?: number) { this.map.setView(latlng, zoom); }
   SetZoom(zoom: number) { this.map.setZoom(zoom) }
 
-  constructor(
-    private layers: LayerManagerService
-  ) {
-    this.currentMapTile = Settings.options.layers[0];
-    this.overlayTiles = Settings.options.layers.slice(1);
-    this.isNauticalChartVisible = Settings.options.layers.includes(Settings.OpenSeaMap);
-  }
+
 }

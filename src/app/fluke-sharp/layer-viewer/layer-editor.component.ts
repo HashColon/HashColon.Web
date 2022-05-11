@@ -1,7 +1,7 @@
 import { Component, Input, OnInit } from '@angular/core';
 import { Layer } from 'leaflet';
 
-import { LayerManagerService } from '@FlukeSharp/services/layer-manager.service';
+import { LayerManagerService, LayerItem } from '@FlukeSharp/services/layer-manager.service';
 import { LayerViewerService } from '@FlukeSharp/services/layer-viewer.service';
 
 @Component({
@@ -11,8 +11,10 @@ import { LayerViewerService } from '@FlukeSharp/services/layer-viewer.service';
 })
 export class LayerEditorComponent implements OnInit {
 
-  @Input() label: string = '';
-  @Input() layer: Layer = new Layer();
+  @Input() item: LayerItem = {
+    layer: new Layer(),
+    label: ''
+  };
   @Input() type: string = '';
 
   isDisabled: boolean = false;
@@ -27,30 +29,26 @@ export class LayerEditorComponent implements OnInit {
   ngOnInit(): void {
   }
 
-  _renameLayer(newname: string): boolean {
-    if (this.manager.renameLayer(this.label, newname)) {
-      this.label = newname;
-      return true;
-    }
-    console.log('edit fail');
-    return false;
+  _idx(): number { return this.manager.GetIdx(this.item); }
+
+  _renameLayer(newname: string): void {
+    this.manager.RenameLayer(this._idx(), newname);
   }
 
   _toggleLayer(): boolean {
     // disable accordian while clicking the button
     this.isDisabled = true;
-    return this.manager.toggleLayer(this.label);
-
+    return this.manager.ToggleLayer(this._idx());
   }
 
   _deleteLayer(): boolean {
     // disable accordian while clicking the button
     this.isDisabled = true;
-    return this.manager.removeLayer(this.label);
+    return this.manager.RemoveLayer(this._idx());
   }
 
   _isVisible(name: string): boolean {
-    return this.manager.isVisible(name);
+    return this.manager.IsVisible(this._idx());
   }
 
   _openedLayer() { this.isOpened = true; this.action.isLoading = false; }
