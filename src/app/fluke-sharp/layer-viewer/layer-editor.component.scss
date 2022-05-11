@@ -1,35 +1,51 @@
-mat-expansion-panel{
-  width: 100%;
-}
-mat-expansion-panel-header{
-  width: 100%;
-}
-mat-panel-title{
-  width:30%;
-}
-mat-panel-description{
+mat-expansion-panel {
   width: 100%;
 }
 
-mat-panel-description input{
+mat-expansion-panel-header {
+  width: 100%;
+}
+
+mat-panel-title {
+  width: 30%;
+  -webkit-touch-callout: none;
+  /* iOS Safari */
+  -webkit-user-select: none;
+  /* Safari */
+  -khtml-user-select: none;
+  /* Konqueror HTML */
+  -moz-user-select: none;
+  /* Old versions of Firefox */
+  -ms-user-select: none;
+  /* Internet Explorer/Edge */
+  user-select: none;
+  /* Non-prefixed version, currently supported by Chrome, Edge, Opera and Firefox */
+
+}
+
+mat-panel-description {
+  width: 100%;
+}
+
+mat-panel-description input {
   background: inherit;
   color: inherit;
   border: 0;
-  font: inherit;    
+  font: inherit;
   width: calc(100% - 5em);
 }
 
-.buttonDiv{
-  position: relative;  
+.buttonDiv {
+  position: relative;
   float: right;
   width: 3.5em;
   text-align: center;
 }
 
-.mat-icon-button {  
+.mat-icon-button {
   width: 1.7em;
   height: 1.7em;
-  line-height: 1.5em;    
+  line-height: 1.5em;
 
   .mat-icon {
     font-size: 1.2em;
@@ -39,6 +55,6 @@ mat-panel-description input{
   }
 }
 
-.fluke-contents{
-  display:inherit;
+.fluke-contents {
+  display: inherit;
 }

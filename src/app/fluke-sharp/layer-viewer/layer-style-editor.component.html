@@ -1,11 +1,11 @@
-<div *ngIf="!_hasCustomStyle()">
-    <button class='EmptyStylebox' mat-stroked-button color='accent' (click)='_addCustomStyle()'>
+<div *ngIf="!_hasUserStyle()">
+    <button class='EmptyStylebox' mat-stroked-button color='accent' (click)='_addUserStyle()'>
         <mat-icon>add</mat-icon>
         <mat-icon>palette</mat-icon>
     </button>
 </div>
 
-<div *ngIf="_hasCustomStyle()">
+<div *ngIf="_hasUserStyle()">
     <mat-form-field appearance='outline' hideRequiredMarker>
         <mat-label>
             Layer Style
@@ -17,7 +17,7 @@
         <mat-error *ngIf="formControl.hasError('jsonInvalid')">
             Invalid JSON syntax
         </mat-error>
-        <button mat-icon-button matSuffix (click)='_removeCustomStyle()'>
+        <button mat-icon-button matSuffix (click)='_removeUserStyle()'>
             <mat-icon>close</mat-icon>
         </button>
     </mat-form-field>

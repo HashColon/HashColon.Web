@@ -1,4 +1,4 @@
-<mat-accordion multi #layerViewer="matAccordion">
+<mat-accordion multi #layerViewer="matAccordion" cdkDropList (cdkDropListDropped)="_dragdropItem($event)">
     <fluke-layer-editor *ngFor='let layerItem of _getAllItems()' [item]='layerItem'
         [type]='_getLayerType(layerItem.layer)'>
     </fluke-layer-editor>

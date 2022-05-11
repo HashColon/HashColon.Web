@@ -26,14 +26,18 @@ export class LayerStyleEditorComponent implements OnInit {
     private action: LayerViewerService) { }
 
   ngOnInit(): void {
-    this.formControl = new FormControl('{\n\n}', [JsonValidator]);
+    this.formControl = new FormControl(
+      this._hasUserStyle()
+        ? JSON.stringify(this.item.userStyles, null, 2)
+        : '{\n\n}',
+      [JsonValidator]);
     this.errorChecker = new GeoJsonErrorStateMatcher();
   }
 
   _idx(): number { return this.manager.GetIdx(this.item); }
-  _hasCustomStyle(): boolean { return (!!this.item.userStyles); }
-  _addCustomStyle() { this._editStyle(); }
-  _removeCustomStyle() { this.manager.RemoveUserStyles(this._idx()); }
+  _hasUserStyle(): boolean { return (!!this.item.userStyles); }
+  _addUserStyle() { this._editStyle(); }
+  _removeUserStyle() { this.manager.RemoveUserStyles(this._idx()); }
 
   _isFormError(): boolean {
     if (this.formControl.hasError('jsonInvalid')) return true;

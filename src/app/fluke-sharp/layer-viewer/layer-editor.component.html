@@ -1,4 +1,4 @@
-<mat-expansion-panel [disabled]='isDisabled' (click)='isDisabled=isRenameLayer||false' hideToggle='true'
+<mat-expansion-panel cdkDrag [disabled]='isDisabled' (click)='isDisabled=isRenameLayer||false' hideToggle='true'
     togglePosition='before' (afterExpand)='_openedLayer()' (afterCollapse)='_closedLayer()'>
     <mat-expansion-panel-header>
         <mat-panel-title>

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { Layer, LayerGroup, GeoJSON, Marker, Path, FeatureGroup, LatLngExpression } from 'leaflet';
+import { Layer, LayerGroup, GeoJSON, Marker, Path, FeatureGroup, LatLngExpression, GridLayer } from 'leaflet';
 import * as leafletSettings from '@FlukeSharp/services/leaflet-custom-settings';
 
 
@@ -56,6 +56,8 @@ export class LayerManagerService {
       this.visible.push(this.items[idx].layer);
     }
 
+    this.ReorderVisibleLayers();
+
     // apply style
     this.ApplyStyles(idx);
 
@@ -95,6 +97,12 @@ export class LayerManagerService {
 
   GetIdx(item: LayerItem): number {
     return this.items.indexOf(item);
+  }
+
+  GetIdx_fromLayer(layer: Layer): number {
+    return this.items.findIndex(
+      (item: LayerItem) => item.layer === layer
+    )
   }
 
   IsValidIdx(idx: number): boolean {
@@ -199,12 +207,35 @@ export class LayerManagerService {
   ShowAllLayers(): void {
     for (var idx = 0; idx < this.items.length; idx++)
       this.ShowLayer(idx);
+    // this.ReorderVisibleLayers();
     this.ApplyStyles();
   }
 
   HideAllLayers(): void {
     this.visible = [];
+    // this.ReorderVisibleLayers();
     this.ApplyStyles();
+  }
+
+  ReorderVisibleLayers(): void {
+    for (let i = this.items.length - 1; i >= 0; i--) {
+      {
+        if (this.items[i].layer instanceof Path)
+          (this.items[i].layer as Path).bringToFront();
+        else if (this.items[i].layer instanceof FeatureGroup)
+          (this.items[i].layer as FeatureGroup).bringToFront();
+        else if (this.items[i].layer instanceof GridLayer)
+          (this.items[i].layer as GridLayer).bringToFront();
+      }
+      // if (this.IsVisible(i)) {
+      //   if (this.items[i].layer instanceof Path)
+      //     (this.items[i].layer as Path).bringToFront();
+      //   else if (this.items[i].layer instanceof FeatureGroup)
+      //     (this.items[i].layer as FeatureGroup).bringToFront();
+      //   else if (this.items[i].layer instanceof GridLayer)
+      //     (this.items[i].layer as GridLayer).bringToFront();
+      // }
+    }
   }
 
   /*                                           * 
