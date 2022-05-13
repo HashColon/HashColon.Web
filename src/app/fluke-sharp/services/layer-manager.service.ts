@@ -98,6 +98,9 @@ export class LayerManagerService {
   GetIdx(item: LayerItem): number {
     return this.items.indexOf(item);
   }
+  GetVisIdx(idx: number): number {
+    return this.visible.indexOf(this.items[idx].layer);
+  }
 
   GetIdx_fromLayer(layer: Layer): number {
     return this.items.findIndex(
@@ -111,7 +114,7 @@ export class LayerManagerService {
 
   IsVisible(idx: number): boolean {
     if (this.IsValidIdx(idx))
-      return this.visible.indexOf(this.items[idx].layer) >= 0;
+      return this.GetVisIdx(idx) >= 0;
     else return false;
   }
 
@@ -190,7 +193,8 @@ export class LayerManagerService {
   HideLayer(idx: number): boolean {
     if (!this.IsValidIdx(idx)) return false;
     if (this.IsVisible(idx)) {
-      this.visible.splice(idx, 1);
+
+      this.visible.splice(this.GetVisIdx(idx), 1);
       this.ApplyStyles();
     }
     return true;
@@ -207,13 +211,11 @@ export class LayerManagerService {
   ShowAllLayers(): void {
     for (var idx = 0; idx < this.items.length; idx++)
       this.ShowLayer(idx);
-    // this.ReorderVisibleLayers();
     this.ApplyStyles();
   }
 
   HideAllLayers(): void {
     this.visible = [];
-    // this.ReorderVisibleLayers();
     this.ApplyStyles();
   }
 
@@ -227,14 +229,6 @@ export class LayerManagerService {
         else if (this.items[i].layer instanceof GridLayer)
           (this.items[i].layer as GridLayer).bringToFront();
       }
-      // if (this.IsVisible(i)) {
-      //   if (this.items[i].layer instanceof Path)
-      //     (this.items[i].layer as Path).bringToFront();
-      //   else if (this.items[i].layer instanceof FeatureGroup)
-      //     (this.items[i].layer as FeatureGroup).bringToFront();
-      //   else if (this.items[i].layer instanceof GridLayer)
-      //     (this.items[i].layer as GridLayer).bringToFront();
-      // }
     }
   }
 
@@ -321,7 +315,6 @@ export class LayerManagerService {
     }
     // case layer type: FeatureGroup
     else if (this.items[idx].layer instanceof FeatureGroup) {
-      console.log("!!");
       if (this.items[idx].userStyles)
         (this.items[idx].layer as FeatureGroup).setStyle(this.items[idx].userStyles);
       else
@@ -329,7 +322,6 @@ export class LayerManagerService {
     }
     // case layer type: Path
     else if (this.items[idx].layer instanceof Path) {
-      console.log("!");
       if (this.items[idx].userStyles)
         (this.items[idx].layer as Path).setStyle(this.items[idx].userStyles);
       else
