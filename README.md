@@ -12,7 +12,8 @@ This project consists of two distinct subprojects:
 
 * May.11, 2022
     * Layer drag & drop  
-    Now, layers can be drag and dropped in the layer panel. The order of the layers now affect the overlaying order(z-index).        
+    Now, layers can be drag and dropped in the layer panel. The order of the layers now affect the overlaying order(z-index). 
+        * Minor patch  (Jun.25, 2022): Editing layers won't be dragged now.
     * Bug fix: 
         * Bugs in editing markers, GeoJSON is now fixed. 
         * LayerManager is now rewritten to get rid of those spaghetti.  
